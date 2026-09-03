@@ -1,0 +1,65 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    min-height: 100vh;
+    background: linear-gradient(135deg, #eef7ff, #f8fbff);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+}
+
+body::before {
+    content: "🎢";
+    position: fixed;
+    font-size: 120px;
+    top: 30px;
+    right: 20px;
+    opacity: 0.12;
+}
+
+body::after {
+    content: "🎡";
+    position: fixed;
+    font-size: 120px;
+    bottom: 20px;
+    left: 10px;
+    opacity: 0.12;
+}
+
+h1 {
+    font-size: 48px;
+    margin-bottom: 12px;
+}
+
+p {
+    font-size: 18px;
+    margin-bottom: 30px;
+}
+
+button {
+    border: none;
+    padding: 16px 28px;
+    border-radius: 14px;
+    font-size: 17px;
+    font-weight: bold;
+    cursor: pointer;
+    background: #111827;
+    color: white;
+}
+
+button:hover {
+    transform: translateY(-2px);
+}
+
+body > h1,
+body > p,
+body > button {
+    position: relative;
+    z-index: 2;
+}
