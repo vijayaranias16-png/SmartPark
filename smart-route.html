@@ -90,16 +90,100 @@
 
     </div>
 
-    <script>
-        const selectedRides = JSON.parse(localStorage.getItem("selectedRides")) || [];
-        const selectedTime = localStorage.getItem("selectedTime") || "4 Hours";
-        const walkingPreference = localStorage.getItem("walkingPreference") || "Normal Walking";
+   <script>
+    const selectedRides =
+        JSON.parse(localStorage.getItem("selectedRides")) || [];
 
-        document.querySelector(".route-summary strong").textContent = "⏱️ " + selectedTime;
+    const selectedTime =
+        localStorage.getItem("selectedTime") || "4 Hours";
 
-        const stopsText = document.querySelectorAll(".route-summary strong")[2];
-        stopsText.textContent = "🎢 " + selectedRides.length;
-    </script>
 
+    // Show selected time
+    document.querySelector(".route-summary strong").textContent =
+        "⏱️ " + selectedTime;
+
+
+    // Ride details
+    const rides = {
+        "Thrill": {
+            type: "🎢 THRILL RIDE",
+            name: "Starfall Coaster",
+            wait: "10 min wait"
+        },
+
+        "Water": {
+            type: "🌊 WATER RIDE",
+            name: "River Rapids",
+            wait: "25 min wait"
+        },
+
+        "Family": {
+            type: "👨‍👩‍👧 FAMILY RIDE",
+            name: "Cloud Carousel",
+            wait: "8 min wait"
+        },
+
+        "Kids": {
+            type: "🧒 KIDS RIDE",
+            name: "Jungle Flyers",
+            wait: "12 min wait"
+        }
+    };
+
+
+    // Route cards
+    const routeList = document.querySelector(".route-list");
+
+    routeList.innerHTML = "";
+
+
+    selectedRides.forEach(function(category, index) {
+
+        if (rides[category]) {
+
+            const ride = rides[category];
+
+            const card = document.createElement("div");
+
+            card.className = "route-card";
+
+            card.innerHTML = `
+                <div class="route-number">${index + 1}</div>
+
+                <div class="route-info">
+                    <span>${ride.type}</span>
+
+                    <h2>${ride.name}</h2>
+
+                    <p>
+                        ⏱️ ${ride.wait}
+                        &nbsp; • &nbsp;
+                        🚶 Stop ${index + 1}
+                    </p>
+                </div>
+            `;
+
+            routeList.appendChild(card);
+
+
+            if (index < selectedRides.length - 1) {
+
+                const line = document.createElement("div");
+
+                line.className = "route-line";
+
+                routeList.appendChild(line);
+            }
+        }
+    });
+
+
+    // Show number of stops
+    const stopsText =
+        document.querySelectorAll(".route-summary strong")[2];
+
+    stopsText.textContent =
+        "🎢 " + selectedRides.length;
+</script>
 </body>
 </html>
