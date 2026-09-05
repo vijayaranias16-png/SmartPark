@@ -83,6 +83,22 @@
 
 <script>
     function generateRoute() {
+
+        const selectedRides = [];
+
+        document.querySelectorAll('input[type="checkbox"]:checked').forEach(function(item) {
+            selectedRides.push(item.value);
+        });
+
+        const selects = document.querySelectorAll('select');
+
+        const time = selects[0].value;
+        const walking = selects[1].value;
+
+        localStorage.setItem("selectedRides", JSON.stringify(selectedRides));
+        localStorage.setItem("selectedTime", time);
+        localStorage.setItem("walkingPreference", walking);
+
         window.location.href = "smart-route.html";
     }
 </script>
