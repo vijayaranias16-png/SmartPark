@@ -6,60 +6,401 @@
 
 body {
     font-family: Arial, sans-serif;
-    min-height: 100vh;
-    background: linear-gradient(135deg, #eef7ff, #f8fbff);
+    background: #f7f8ff;
+    color: #17172f;
+}
+
+/* NAVBAR */
+
+.navbar {
+    height: 75px;
+    padding: 0 6%;
     display: flex;
-    justify-content: center;
     align-items: center;
-    padding: 20px;
-}
-
-body::before {
-    content: "🎢";
-    position: fixed;
-    font-size: 120px;
-    top: 30px;
-    right: 20px;
-    opacity: 0.12;
-}
-
-body::after {
-    content: "🎡";
-    position: fixed;
-    font-size: 120px;
-    bottom: 20px;
-    left: 10px;
-    opacity: 0.12;
-}
-
-h1 {
-    font-size: 48px;
-    margin-bottom: 12px;
-}
-
-p {
-    font-size: 18px;
-    margin-bottom: 30px;
-}
-
-button {
-    border: none;
-    padding: 16px 28px;
-    border-radius: 14px;
-    font-size: 17px;
-    font-weight: bold;
-    cursor: pointer;
-    background: #111827;
+    justify-content: space-between;
+    background: #10103d;
     color: white;
 }
 
-button:hover {
-    transform: translateY(-2px);
+.logo {
+    font-size: 27px;
+    font-weight: bold;
 }
 
-body > h1,
-body > p,
-body > button {
+.logo span {
+    color: #ffd21c;
+}
+
+.nav-links {
+    display: flex;
+    gap: 28px;
+}
+
+.nav-links a {
+    color: white;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.nav-links a:hover {
+    color: #ffd21c;
+}
+
+.login-btn {
+    padding: 11px 20px;
+    border-radius: 25px;
+    border: 1px solid #ffd21c;
+    background: transparent;
+    color: white;
+    font-weight: bold;
+}
+
+
+/* HERO */
+
+.hero {
+    min-height: 570px;
+    padding: 70px 7%;
+    display: flex;
+    align-items: center;
+    position: relative;
+    overflow: hidden;
+    color: white;
+    background: linear-gradient(135deg, #17134d, #542078, #d62d75);
+}
+
+.hero-content {
+    width: 50%;
     position: relative;
     z-index: 2;
+}
+
+.small-title {
+    color: #ffd21c;
+    font-size: 14px;
+    font-weight: bold;
+    letter-spacing: 2px;
+    margin-bottom: 18px;
+}
+
+.hero h1 {
+    font-size: 70px;
+    line-height: 1;
+    margin-bottom: 25px;
+}
+
+.hero h1 span {
+    color: #ffd21c;
+}
+
+.hero p {
+    font-size: 19px;
+    line-height: 1.6;
+    max-width: 520px;
+    color: #eeeaff;
+}
+
+.main-btn {
+    margin-top: 30px;
+    padding: 17px 28px;
+    border: none;
+    border-radius: 35px;
+    background: linear-gradient(90deg, #ff20a8, #ffb300);
+    color: white;
+    font-size: 18px;
+    font-weight: bold;
+    cursor: pointer;
+    box-shadow: 0 10px 30px #0005;
+}
+
+.main-btn:hover {
+    transform: translateY(-4px);
+}
+
+.main-btn span {
+    margin-left: 12px;
+    font-size: 22px;
+}
+
+.quick-info {
+    display: flex;
+    gap: 25px;
+    margin-top: 30px;
+    font-size: 14px;
+}
+
+
+/* PARK SCENE */
+
+.park-scene {
+    position: absolute;
+    right: 3%;
+    width: 50%;
+    height: 100%;
+}
+
+.sun {
+    position: absolute;
+    right: 25%;
+    top: 15%;
+    font-size: 70px;
+}
+
+.stars {
+    position: absolute;
+    top: 12%;
+    left: 20%;
+    color: #ffd21c;
+    font-size: 25px;
+    letter-spacing: 15px;
+}
+
+.ferris-wheel {
+    position: absolute;
+    right: 5%;
+    top: 18%;
+    font-size: 210px;
+    filter: drop-shadow(0 10px 15px #0006);
+}
+
+.roller-coaster {
+    position: absolute;
+    right: 20%;
+    bottom: 15%;
+    font-size: 180px;
+}
+
+.castle {
+    position: absolute;
+    right: 42%;
+    bottom: 13%;
+    font-size: 100px;
+}
+
+.balloon {
+    position: absolute;
+    font-size: 45px;
+    animation: float 3s ease-in-out infinite;
+}
+
+.balloon1 {
+    right: 48%;
+    top: 25%;
+}
+
+.balloon2 {
+    right: 8%;
+    top: 45%;
+    animation-delay: 1s;
+}
+
+@keyframes float {
+    50% {
+        transform: translateY(-18px);
+    }
+}
+
+
+/* FEATURES */
+
+.features {
+    padding: 45px 7%;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 25px;
+    background: white;
+}
+
+.feature {
+    padding: 20px;
+}
+
+.feature-icon {
+    font-size: 35px;
+    margin-bottom: 12px;
+}
+
+.feature h3 {
+    margin-bottom: 8px;
+}
+
+.feature p {
+    color: #666;
+    line-height: 1.5;
+}
+
+
+/* RIDES */
+
+.rides {
+    padding: 65px 7%;
+    background: #10103d;
+    color: white;
+}
+
+.section-heading {
+    text-align: center;
+    margin-bottom: 35px;
+}
+
+.section-heading p {
+    color: #ffd21c;
+    font-size: 13px;
+    font-weight: bold;
+    letter-spacing: 2px;
+}
+
+.section-heading h2 {
+    font-size: 38px;
+    margin-top: 8px;
+}
+
+.ride-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 22px;
+}
+
+.ride-card {
+    overflow: hidden;
+    border-radius: 20px;
+    background: #202052;
+    transition: 0.3s;
+}
+
+.ride-card:hover {
+    transform: translateY(-8px);
+}
+
+.ride-picture {
+    height: 170px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 90px;
+    background: linear-gradient(135deg, #3226a8, #df287a);
+}
+
+.water .ride-picture {
+    background: linear-gradient(135deg, #147bd1, #31d9e8);
+}
+
+.family .ride-picture {
+    background: linear-gradient(135deg, #ef7d24, #ffd21c);
+}
+
+.kids .ride-picture {
+    background: linear-gradient(135deg, #24b66b, #65e5bd);
+}
+
+.ride-info {
+    padding: 20px;
+}
+
+.ride-info span {
+    font-size: 11px;
+    color: #ffd21c;
+    font-weight: bold;
+    letter-spacing: 1px;
+}
+
+.ride-info h3 {
+    font-size: 21px;
+    margin: 7px 0;
+}
+
+.ride-info p {
+    color: #bbb;
+}
+
+
+/* STATS */
+
+.stats {
+    margin: 55px 7%;
+    padding: 35px;
+    border-radius: 25px;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    text-align: center;
+    color: white;
+    background: linear-gradient(135deg, #39219b, #891f92);
+}
+
+.stats strong {
+    font-size: 35px;
+    color: #ffd21c;
+}
+
+.stats p {
+    margin-top: 7px;
+}
+
+
+/* FOOTER */
+
+footer {
+    padding: 40px;
+    text-align: center;
+    background: #0b0b2c;
+    color: white;
+}
+
+footer h2 {
+    margin-bottom: 10px;
+}
+
+footer p {
+    color: #aaa;
+}
+
+
+/* MOBILE */
+
+@media (max-width: 800px) {
+
+    .nav-links {
+        display: none;
+    }
+
+    .hero {
+        padding: 50px 7%;
+    }
+
+    .hero-content {
+        width: 100%;
+    }
+
+    .hero h1 {
+        font-size: 50px;
+    }
+
+    .park-scene {
+        opacity: 0.25;
+        width: 100%;
+    }
+
+    .features,
+    .ride-grid,
+    .stats {
+        grid-template-columns: 1fr 1fr;
+    }
+}
+
+@media (max-width: 500px) {
+
+    .features,
+    .ride-grid,
+    .stats {
+        grid-template-columns: 1fr;
+    }
+
+    .hero h1 {
+        font-size: 42px;
+    }
+
+    .quick-info {
+        flex-direction: column;
+        gap: 8px;
+    }
 }
