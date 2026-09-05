@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Plan My Day - SmartPark</title>
+    <link rel="stylesheet" href="./style.css?v=2">
+</head>
+
+<body>
+
+    <div class="plan-container">
+
+        <h1>🎢 Plan My Day</h1>
+
+        <p>Tell us what kind of park day you want!</p>
+
+        <div class="plan-card">
+
+            <h2>🎯 What do you want to enjoy?</h2>
+
+            <label>
+                <input type="checkbox" value="Thrill">
+                🎢 Thrill Rides
+            </label>
+
+            <label>
+                <input type="checkbox" value="Water">
+                🌊 Water Rides
+            </label>
+
+            <label>
+                <input type="checkbox" value="Family">
+                👨‍👩‍👧 Family Rides
+            </label>
+
+            <label>
+                <input type="checkbox" value="Kids">
+                🧒 Kids Zone
+            </label>
+
+            <h2>📍 Places to Visit</h2>
+
+            <label>
+                <input type="checkbox" value="Food">
+                🍔 Food
+            </label>
+
+            <label>
+                <input type="checkbox" value="Restroom">
+                🚻 Restroom
+            </label>
+
+            <label>
+                <input type="checkbox" value="Locker">
+                🔐 Locker
+            </label>
+
+            <h2>⏰ How much time do you have?</h2>
+
+            <select>
+                <option>2 Hours</option>
+                <option>4 Hours</option>
+                <option>6 Hours</option>
+                <option>Full Day</option>
+            </select>
+
+            <h2>🚶 Walking Preference</h2>
+
+            <select>
+                <option>Less Walking</option>
+                <option>Normal Walking</option>
+                <option>I Don't Mind Walking</option>
+            </select>
+
+            <button onclick="generateRoute()">
+                🚀 Generate Smart Route
+            </button>
+
+        </div>
+
+    </div>
+
+    <script>
+        function generateRoute() {
+            alert("🎉 Your Smart Route is being created!");
+        }
+    </script>
+
+</body>
+</html>
