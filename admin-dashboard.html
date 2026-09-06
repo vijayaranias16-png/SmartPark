@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Admin Dashboard - SmartPark</title>
+
+    <link rel="stylesheet"
+          href="https://vijayaranias16-png.github.io/SmartPark/style.css">
+</head>
+
+<body>
+
+<nav class="navbar">
+
+    <div class="logo">🎢 SmartPark Admin</div>
+
+    <div class="nav-links">
+        <a href="index.html">Home</a>
+        <a href="live-crowd.html">Live Crowd</a>
+    </div>
+
+</nav>
+
+
+<div class="crowd-page">
+
+    <div class="crowd-header">
+
+        <p>SMARTPARK CONTROL PANEL</p>
+
+        <h1>👨‍💼 Admin Dashboard</h1>
+
+        <span>Update park crowd information</span>
+
+    </div>
+
+
+    <!-- TICKET COUNT -->
+
+    <div class="crowd-message">
+
+        🎟️ Today's Tickets
+
+        <br><br>
+
+        <input
+            type="number"
+            id="ticketCount"
+            value="0"
+            min="0"
+            style="padding:12px;
+                   border-radius:10px;
+                   border:2px solid #eee;
+                   width:150px;
+                   font-size:18px;
+                   text-align:center;"
+        >
+
+        <button onclick="updateTickets()"
+                style="padding:12px 20px;
+                       margin-left:10px;
+                       border:none;
+                       border-radius:10px;
+                       background:#542078;
+                       color:white;
+                       font-weight:bold;
+                       cursor:pointer;">
+            Update
+        </button>
+
+    </div>
+
+
+    <!-- SUMMARY -->
+
+    <div class="crowd-summary">
+
+        <div class="crowd-box">
+            <strong id="tickets">0</strong>
+            <small>Tickets Taken</small>
+        </div>
+
+        <div class="crowd-box">
+            <strong id="crowdLevel">Low</strong>
+            <small>Overall Crowd</small>
+        </div>
+
+        <div class="crowd-box">
+            <strong id="lastUpdated">--</strong>
+            <small>Last Updated</small>
+        </div>
+
+    </div>
+
+
+    <!-- MESSAGE -->
+
+    <div class="crowd-message" id="adminMessage">
+        📢 Update the ticket count to see the crowd message.
+    </div>
+
+
+    <button class="crowd-back"
+            onclick="window.location.href='index.html'">
+        ← Back to Home
+    </button>
+
+</div>
+
+
+<script>
+
+function updateTickets() {
+
+    const count =
+        Number(document.getElementById("ticketCount").value);
+
+    document.getElementById("tickets").textContent = count;
+
+
+    let level = "Low";
+    let message = "";
+
+
+    if (count < 100) {
+
+        level = "Low";
+
+        message =
+            "🟢 Crowd is low! Visitors can enjoy the park comfortably.";
+
+    }
+
+    else if (count < 250) {
+
+        level = "Medium";
+
+        message =
+            "🟡 Crowd is moderate. Visitors should plan their rides smartly.";
+
+    }
+
+    else {
+
+        level = "High";
+
+        message =
+            "🔴 Crowd is high! Visitors may experience longer waiting times.";
+
+    }
+
+
+    document.getElementById("crowdLevel").textContent = level;
+
+    document.getElementById("adminMessage").textContent = message;
+
+
+    const now = new Date();
+
+    document.getElementById("lastUpdated").textContent =
+        now.toLocaleTimeString();
+
+
+    localStorage.setItem("ticketCount", count);
+
+    localStorage.setItem("crowdLevel", level);
+
+    localStorage.setItem("lastUpdated", now.toLocaleTimeString());
+
+    localStorage.setItem("crowdMessage", message);
+
+}
+
+
+function loadData() {
+
+    const savedTickets =
+        localStorage.getItem("ticketCount");
+
+    const savedLevel =
+        localStorage.getItem("crowdLevel");
+
+    const savedTime =
+        localStorage.getItem("lastUpdated");
+
+    const savedMessage =
+        localStorage.getItem("crowdMessage");
+
+
+    if (savedTickets !== null) {
+
+        document.getElementById("ticketCount").value =
+            savedTickets;
+
+        document.getElementById("tickets").textContent =
+            savedTickets;
+
+    }
+
+
+    if (savedLevel !== null) {
+
+        document.getElementById("crowdLevel").textContent =
+            savedLevel;
+
+    }
+
+
+    if (savedTime !== null) {
+
+        document.getElementById("lastUpdated").textContent =
+            savedTime;
+
+    }
+
+
+    if (savedMessage !== null) {
+
+        document.getElementById("adminMessage").textContent =
+            savedMessage;
+
+    }
+
+}
+
+
+loadData();
+
+</script>
+
+</body>
+</html>
