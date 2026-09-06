@@ -2,20 +2,27 @@
 <html lang="en">
 
 <head>
+
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <meta name="viewport"
+        content="width=device-width, initial-scale=1.0">
 
     <title>Smart Route - SmartPark</title>
 
     <link rel="stylesheet"
         href="https://vijayaranias16-png.github.io/SmartPark/style.css">
+
 </head>
+
 
 <body>
 
     <div class="route-container">
 
+
         <!-- HEADER -->
+
         <div class="route-header">
 
             <p>🎢 SMARTPARK</p>
@@ -30,6 +37,7 @@
 
 
         <!-- SMART RECOMMENDATION -->
+
         <div id="recommendation-box" style="
             max-width:900px;
             margin:0 auto 25px;
@@ -45,27 +53,37 @@
                 font-size:14px;
                 letter-spacing:1px;
             ">
+
                 🧠 SMART RECOMMENDATION
+
             </div>
+
 
             <h2 id="recommendation-title" style="
                 margin:8px 0;
                 color:#17134d;
             ">
+
                 Finding the best ride for you...
+
             </h2>
+
 
             <p id="recommendation-text" style="
                 margin:0;
                 color:#666;
             ">
+
                 Checking waiting time and crowd level.
+
             </p>
 
         </div>
 
 
+
         <!-- TIME BUDGET -->
+
         <div id="time-budget-box" style="
             max-width:900px;
             margin:0 auto 25px;
@@ -81,27 +99,37 @@
                 font-size:14px;
                 letter-spacing:1px;
             ">
+
                 ⏰ TIME BUDGET
+
             </div>
+
 
             <h2 id="time-budget-title" style="
                 margin:8px 0;
                 color:#17134d;
             ">
+
                 Your park time
+
             </h2>
+
 
             <p id="time-budget-text" style="
                 margin:0;
                 color:#666;
             ">
+
                 Calculating your available time...
+
             </p>
 
         </div>
 
 
+
         <!-- LIVE CROWD -->
+
         <div style="
             max-width:900px;
             margin:0 auto 25px;
@@ -117,22 +145,30 @@
                 font-size:14px;
                 letter-spacing:1px;
             ">
+
                 📡 LIVE CROWD STATUS
+
             </div>
+
 
             <h2 style="
                 margin:8px 0 18px;
                 color:#17134d;
             ">
+
                 Current Ride Crowd
+
             </h2>
+
 
             <div id="crowd-status-list"></div>
 
         </div>
 
 
+
         <!-- ROUTE SUMMARY -->
+
         <div class="route-summary">
 
             <div>
@@ -176,20 +212,15 @@
         </div>
 
 
+
         <!-- ROUTE LIST -->
+
         <div class="route-list"></div>
 
 
-        <!-- MAP -->
-        <button class="map-btn"
-            onclick="showMapMessage()">
-
-            🗺️ View Map
-
-        </button>
-
 
         <!-- BACK -->
+
         <button class="back-btn"
             onclick="window.location.href='plan.html'">
 
@@ -197,14 +228,18 @@
 
         </button>
 
+
     </div>
+
 
 
     <script>
 
+
         /* =====================================
            GET USER SELECTION
         ===================================== */
+
 
         const selectedRides =
             JSON.parse(
@@ -222,9 +257,11 @@
             || "Normal Walking";
 
 
+
         /* =====================================
            WALKING DISTANCE
         ===================================== */
+
 
         const walkingDistances = {
 
@@ -239,9 +276,11 @@
         };
 
 
+
         /* =====================================
            RIDE DATA
         ===================================== */
+
 
         const rides = {
 
@@ -307,9 +346,11 @@
         };
 
 
+
         /* =====================================
            CALCULATE WALKING
         ===================================== */
+
 
         let totalWalking = 0;
 
@@ -327,27 +368,33 @@
             "🚶 " + totalWalking + " m";
 
 
+
         /* =====================================
            SHOW SELECTED TIME
         ===================================== */
+
 
         document.getElementById("total-time")
             .textContent =
             "⏱️ " + selectedTime;
 
 
+
         /* =====================================
            SHOW NUMBER OF STOPS
         ===================================== */
+
 
         document.getElementById("total-stops")
             .textContent =
             "🎢 " + selectedRides.length;
 
 
+
         /* =====================================
            CONVERT TIME
         ===================================== */
+
 
         let availableMinutes = 240;
 
@@ -377,9 +424,11 @@
         }
 
 
+
         /* =====================================
            ESTIMATE TOTAL RIDE TIME
         ===================================== */
+
 
         let totalWait = 0;
 
@@ -404,9 +453,11 @@
             totalWait + walkingTime;
 
 
+
         /* =====================================
            TIME BUDGET MESSAGE
         ===================================== */
+
 
         const timeBudgetTitle =
             document.getElementById(
@@ -431,6 +482,7 @@
 
         }
 
+
         else if (
             estimatedTotalTime <= availableMinutes
         ) {
@@ -445,6 +497,7 @@
                 + " minutes. You have enough time for your selected stops.";
 
         }
+
 
         else {
 
@@ -462,9 +515,11 @@
         }
 
 
+
         /* =====================================
            SMART RECOMMENDATION
         ===================================== */
+
 
         let bestRide = null;
 
@@ -472,7 +527,9 @@
         selectedRides.forEach(function(category) {
 
             if (!rides[category]) {
+
                 return;
+
             }
 
 
@@ -491,6 +548,7 @@
             }
 
         });
+
 
 
         const recommendationTitle =
@@ -522,6 +580,7 @@
 
         }
 
+
         else {
 
             recommendationTitle.textContent =
@@ -534,9 +593,11 @@
         }
 
 
+
         /* =====================================
            LIVE CROWD DISPLAY
         ===================================== */
+
 
         const crowdList =
             document.getElementById(
@@ -547,7 +608,9 @@
         selectedRides.forEach(function(category) {
 
             if (!rides[category]) {
+
                 return;
+
             }
 
 
@@ -579,15 +642,17 @@
                         color:#17134d;
                         font-size:17px;
                     ">
+
                         ${ride.name}
+
                     </strong>
 
                     <br>
 
-                    <small style="
-                        color:#666;
-                    ">
+                    <small style="color:#666;">
+
                         ⏱️ ${ride.wait} min wait
+
                     </small>
 
                 </div>
@@ -611,6 +676,7 @@
         });
 
 
+
         if (selectedRides.length === 0) {
 
             crowdList.innerHTML = `
@@ -619,7 +685,10 @@
                     color:#666;
                     margin:0;
                 ">
-                    No rides selected. Go back to Plan My Day.
+
+                    No rides selected.
+                    Go back to Plan My Day.
+
                 </p>
 
             `;
@@ -627,9 +696,11 @@
         }
 
 
+
         /* =====================================
            CREATE ROUTE CARDS
         ===================================== */
+
 
         const routeList =
             document.querySelector(
@@ -643,8 +714,11 @@
         selectedRides.forEach(
             function(category, index) {
 
+
                 if (!rides[category]) {
+
                     return;
+
                 }
 
 
@@ -718,6 +792,7 @@
                     selectedRides.length - 1
                 ) {
 
+
                     const line =
                         document.createElement(
                             "div"
@@ -738,9 +813,11 @@
         );
 
 
+
         /* =====================================
            NO RIDE MESSAGE
         ===================================== */
+
 
         if (selectedRides.length === 0) {
 
@@ -757,14 +834,19 @@
                     <h2 style="
                         color:#17134d;
                     ">
+
                         🎢 No rides selected
+
                     </h2>
+
 
                     <p style="
                         color:#666;
                     ">
+
                         Please go back and select
                         your preferred rides.
+
                     </p>
 
                 </div>
@@ -773,16 +855,6 @@
 
         }
 
-
-        /* =====================================
-           MAP BUTTON
-        ===================================== */
-
-        function showMapMessage() {
-    window.location.href = "map.html";
-}
-
-        }
 
     </script>
 
