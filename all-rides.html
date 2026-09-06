@@ -1,0 +1,523 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>All Rides - SmartPark</title>
+
+    <link rel="stylesheet"
+        href="https://vijayaranias16-png.github.io/SmartPark/style.css">
+
+    <style>
+
+        .rides-page {
+            min-height: 100vh;
+            padding: 45px 6%;
+            background: linear-gradient(135deg, #17134d, #542078, #d62d75);
+        }
+
+        .rides-header {
+            text-align: center;
+            color: white;
+            margin-bottom: 35px;
+        }
+
+        .rides-header p {
+            color: #ffd21c;
+            font-weight: bold;
+            letter-spacing: 3px;
+        }
+
+        .rides-header h1 {
+            font-size: 48px;
+            margin: 10px 0;
+        }
+
+        .rides-header span {
+            color: #eee;
+            font-size: 17px;
+        }
+
+        .filter-box {
+            max-width: 1000px;
+            margin: 0 auto 30px;
+            padding: 18px;
+            background: white;
+            border-radius: 18px;
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .filter-btn {
+            border: none;
+            padding: 12px 20px;
+            border-radius: 12px;
+            cursor: pointer;
+            background: #eee;
+            font-weight: bold;
+        }
+
+        .filter-btn:hover {
+            background: #ffd21c;
+        }
+
+        .rides-grid {
+            max-width: 1100px;
+            margin: auto;
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 22px;
+        }
+
+        .ride-card {
+            background: white;
+            border-radius: 22px;
+            overflow: hidden;
+            box-shadow: 0 12px 30px #0005;
+            transition: 0.3s;
+        }
+
+        .ride-card:hover {
+            transform: translateY(-7px);
+        }
+
+        .ride-image {
+            width: 100%;
+            height: 190px;
+            object-fit: cover;
+        }
+
+        .ride-content {
+            padding: 20px;
+        }
+
+        .ride-icon {
+            font-size: 30px;
+        }
+
+        .ride-type {
+            color: #d62d75;
+            font-size: 12px;
+            font-weight: bold;
+            letter-spacing: 1px;
+        }
+
+        .ride-content h2 {
+            margin: 7px 0;
+            color: #17134d;
+            font-size: 22px;
+        }
+
+        .ride-info {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 15px;
+            padding-top: 12px;
+            border-top: 1px solid #eee;
+            font-size: 14px;
+        }
+
+        .low {
+            color: green;
+            font-weight: bold;
+        }
+
+        .medium {
+            color: #d49b00;
+            font-weight: bold;
+        }
+
+        .high {
+            color: red;
+            font-weight: bold;
+        }
+
+        .back-home {
+            display: block;
+            max-width: 1100px;
+            margin: 30px auto 0;
+            padding: 16px;
+            background: white;
+            color: #542078;
+            text-align: center;
+            text-decoration: none;
+            border-radius: 15px;
+            font-weight: bold;
+        }
+
+        @media (max-width: 900px) {
+
+            .rides-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+        }
+
+        @media (max-width: 600px) {
+
+            .rides-page {
+                padding: 35px 5%;
+            }
+
+            .rides-header h1 {
+                font-size: 36px;
+            }
+
+            .rides-grid {
+                grid-template-columns: 1fr;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+<div class="rides-page">
+
+
+    <!-- HEADER -->
+
+    <div class="rides-header">
+
+        <p>🎢 SMARTPARK</p>
+
+        <h1>All Rides 🎡</h1>
+
+        <span>
+            Explore all 20 rides and choose your favourites!
+        </span>
+
+    </div>
+
+
+    <!-- FILTER -->
+
+    <div class="filter-box">
+
+        <button class="filter-btn"
+            onclick="showRides('All')">
+            All 20
+        </button>
+
+        <button class="filter-btn"
+            onclick="showRides('Thrill')">
+            🎢 Thrill
+        </button>
+
+        <button class="filter-btn"
+            onclick="showRides('Water')">
+            🌊 Water
+        </button>
+
+        <button class="filter-btn"
+            onclick="showRides('Family')">
+            👨‍👩‍👧 Family
+        </button>
+
+        <button class="filter-btn"
+            onclick="showRides('Kids')">
+            🧒 Kids
+        </button>
+
+    </div>
+
+
+    <!-- RIDES -->
+
+    <div class="rides-grid"
+        id="rides-grid">
+    </div>
+
+
+    <a href="index.html"
+        class="back-home">
+        ← Back to Home
+    </a>
+
+
+</div>
+
+
+<script>
+
+const rides = [
+
+    {
+        name: "Vaigai Vortex",
+        type: "Thrill",
+        icon: "🎢",
+        image: "https://images.unsplash.com/photo-1567942713682-4d0d3c1a7a7d?auto=format&fit=crop&w=800&q=80",
+        wait: 10,
+        crowd: "Low"
+    },
+
+    {
+        name: "Chola Coaster",
+        type: "Thrill",
+        icon: "🎢",
+        image: "https://images.unsplash.com/photo-1597466599360-3b9775841aec?auto=format&fit=crop&w=800&q=80",
+        wait: 18,
+        crowd: "Medium"
+    },
+
+    {
+        name: "Madurai Thunder",
+        type: "Thrill",
+        icon: "⚡",
+        image: "https://images.unsplash.com/photo-1513889961551-628c1e5e2ee9?auto=format&fit=crop&w=800&q=80",
+        wait: 22,
+        crowd: "High"
+    },
+
+    {
+        name: "Marina Rush",
+        type: "Thrill",
+        icon: "🎢",
+        image: "https://images.unsplash.com/photo-1513889961551-628c1e5e2ee9?auto=format&fit=crop&w=800&q=80",
+        wait: 15,
+        crowd: "Medium"
+    },
+
+    {
+        name: "Kaveri Cyclone",
+        type: "Thrill",
+        icon: "🌪️",
+        image: "https://images.unsplash.com/photo-1536768139911-e290a59011e4?auto=format&fit=crop&w=800&q=80",
+        wait: 25,
+        crowd: "High"
+    },
+
+    {
+        name: "Tamilan Twist",
+        type: "Thrill",
+        icon: "🎡",
+        image: "https://images.unsplash.com/photo-1597197899909-7c6c7f9c1a5d?auto=format&fit=crop&w=800&q=80",
+        wait: 12,
+        crowd: "Low"
+    },
+
+
+    {
+        name: "Vaigai Rapids",
+        type: "Water",
+        icon: "🌊",
+        image: "https://images.unsplash.com/photo-1530549387789-4c1017266635?auto=format&fit=crop&w=800&q=80",
+        wait: 25,
+        crowd: "High"
+    },
+
+    {
+        name: "Kaveri Splash",
+        type: "Water",
+        icon: "💦",
+        image: "https://images.unsplash.com/photo-1560089000-7433a4ebbd64?auto=format&fit=crop&w=800&q=80",
+        wait: 20,
+        crowd: "Medium"
+    },
+
+    {
+        name: "Marina Wave",
+        type: "Water",
+        icon: "🌊",
+        image: "https://images.unsplash.com/photo-1576610616656-d3aa5d1f4534?auto=format&fit=crop&w=800&q=80",
+        wait: 30,
+        crowd: "High"
+    },
+
+    {
+        name: "Cauvery Falls",
+        type: "Water",
+        icon: "💧",
+        image: "https://images.unsplash.com/photo-1432405972618-c60b0225b8f9?auto=format&fit=crop&w=800&q=80",
+        wait: 14,
+        crowd: "Low"
+    },
+
+    {
+        name: "Tamil Nadu Aqua Ride",
+        type: "Water",
+        icon: "🏄",
+        image: "https://images.unsplash.com/photo-1560089000-7433a4ebbd64?auto=format&fit=crop&w=800&q=80",
+        wait: 18,
+        crowd: "Medium"
+    },
+
+
+    {
+        name: "Meenakshi Carousel",
+        type: "Family",
+        icon: "🎠",
+        image: "https://images.unsplash.com/photo-1578662996442-48f60103fc96?auto=format&fit=crop&w=800&q=80",
+        wait: 8,
+        crowd: "Low"
+    },
+
+    {
+        name: "Temple Town Train",
+        type: "Family",
+        icon: "🚂",
+        image: "https://images.unsplash.com/photo-1544620347-c4fd4a3d5957?auto=format&fit=crop&w=800&q=80",
+        wait: 12,
+        crowd: "Low"
+    },
+
+    {
+        name: "Kovil Oorla Ride",
+        type: "Family",
+        icon: "🎢",
+        image: "https://images.unsplash.com/photo-1513889961551-628c1e5e2ee9?auto=format&fit=crop&w=800&q=80",
+        wait: 16,
+        crowd: "Medium"
+    },
+
+    {
+        name: "Jasmine Wheel",
+        type: "Family",
+        icon: "🎡",
+        image: "https://images.unsplash.com/photo-1568322445389-f64ac2515020?auto=format&fit=crop&w=800&q=80",
+        wait: 10,
+        crowd: "Low"
+    },
+
+    {
+        name: "Pongal Express",
+        type: "Family",
+        icon: "🚂",
+        image: "https://images.unsplash.com/photo-1544620347-c4fd4a3d5957?auto=format&fit=crop&w=800&q=80",
+        wait: 15,
+        crowd: "Medium"
+    },
+
+
+    {
+        name: "Kutty Chutti Ride",
+        type: "Kids",
+        icon: "🧒",
+        image: "https://images.unsplash.com/photo-1596461404969-9ae70f2830c1?auto=format&fit=crop&w=800&q=80",
+        wait: 7,
+        crowd: "Low"
+    },
+
+    {
+        name: "Little Tamilan Flyers",
+        type: "Kids",
+        icon: "✈️",
+        image: "https://images.unsplash.com/photo-1531058020387-3be344556be6?auto=format&fit=crop&w=800&q=80",
+        wait: 9,
+        crowd: "Low"
+    },
+
+    {
+        name: "Chinna Chinna Cars",
+        type: "Kids",
+        icon: "🚗",
+        image: "https://images.unsplash.com/photo-1503736334956-4c8f8e92946d?auto=format&fit=crop&w=800&q=80",
+        wait: 11,
+        crowd: "Medium"
+    },
+
+    {
+        name: "Butterfly Garden Ride",
+        type: "Kids",
+        icon: "🦋",
+        image: "https://images.unsplash.com/photo-1518531933037-91b2f5f229cc?auto=format&fit=crop&w=800&q=80",
+        wait: 6,
+        crowd: "Low"
+    }
+
+];
+
+
+function showRides(category) {
+
+    const grid =
+        document.getElementById("rides-grid");
+
+    grid.innerHTML = "";
+
+
+    rides.forEach(function(ride) {
+
+        if (
+            category !== "All"
+            &&
+            ride.type !== category
+        ) {
+            return;
+        }
+
+
+        const card =
+            document.createElement("div");
+
+
+        card.className =
+            "ride-card";
+
+
+        const crowdClass =
+            ride.crowd.toLowerCase();
+
+
+        card.innerHTML = `
+
+            <img
+                class="ride-image"
+                src="${ride.image}"
+                alt="${ride.name}"
+            >
+
+            <div class="ride-content">
+
+                <div class="ride-icon">
+                    ${ride.icon}
+                </div>
+
+                <div class="ride-type">
+                    ${ride.type} RIDE
+                </div>
+
+                <h2>
+                    ${ride.name}
+                </h2>
+
+                <div class="ride-info">
+
+                    <span>
+                        ⏱️ ${ride.wait} min
+                    </span>
+
+                    <span class="${crowdClass}">
+                        ${ride.crowd === "Low" ? "🟢" :
+                          ride.crowd === "Medium" ? "🟡" : "🔴"}
+                        ${ride.crowd}
+                    </span>
+
+                </div>
+
+            </div>
+
+        `;
+
+
+        grid.appendChild(card);
+
+    });
+
+}
+
+
+showRides("All");
+
+</script>
+
+</body>
+</html>
