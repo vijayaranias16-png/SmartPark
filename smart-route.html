@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Smart Route - SmartPark</title>
+
     <link rel="stylesheet" href="https://vijayaranias16-png.github.io/SmartPark/style.css">
 </head>
 
@@ -17,7 +18,9 @@
             <span>We planned your park day for you!</span>
         </div>
 
+
         <div class="route-summary">
+
             <div>
                 <strong>⏱️ 4 Hours</strong>
                 <small>Total Time</small>
@@ -32,57 +35,19 @@
                 <strong>🎢 4</strong>
                 <small>Stops</small>
             </div>
+
         </div>
+
 
         <div class="route-list">
 
-            <div class="route-card">
-                <div class="route-number">1</div>
-                <div class="route-info">
-                    <span>🎢 THRILL RIDE</span>
-                    <h2>Starfall Coaster</h2>
-                    <p>⏱️ 10 min wait &nbsp; • &nbsp; 🚶 Start here</p>
-                </div>
-            </div>
-
-            <div class="route-line"></div>
-
-            <div class="route-card">
-                <div class="route-number">2</div>
-                <div class="route-info">
-                    <span>🌊 WATER RIDE</span>
-                    <h2>River Rapids</h2>
-                    <p>⏱️ 25 min wait &nbsp; • &nbsp; 🚶 180 m</p>
-                </div>
-            </div>
-
-            <div class="route-line"></div>
-
-            <div class="route-card">
-                <div class="route-number">3</div>
-                <div class="route-info">
-                    <span>👨‍👩‍👧 FAMILY RIDE</span>
-                    <h2>Cloud Carousel</h2>
-                    <p>⏱️ 8 min wait &nbsp; • &nbsp; 🚶 220 m</p>
-                </div>
-            </div>
-
-            <div class="route-line"></div>
-
-            <div class="route-card">
-                <div class="route-number">4</div>
-                <div class="route-info">
-                    <span>🍔 FOOD</span>
-                    <h2>Food Court</h2>
-                    <p>🚶 250 m &nbsp; • &nbsp; Perfect break spot</p>
-                </div>
-            </div>
-
         </div>
+
 
         <button class="map-btn">
             🗺️ View Map
         </button>
+
 
         <button class="back-btn" onclick="window.location.href='plan.html'">
             ← Back to Plan
@@ -90,115 +55,196 @@
 
     </div>
 
-   <script>
-    const selectedRides =
-        JSON.parse(localStorage.getItem("selectedRides")) || [];
 
-    const selectedTime =
-        localStorage.getItem("selectedTime") || "4 Hours";
-       const walkingDistances = {
-    "Thrill": 180,
-    "Water": 220,
-    "Family": 150,
-    "Kids": 120
-};
+    <script>
 
-let totalWalking = 0;
+        // Get selected information
+        const selectedRides =
+            JSON.parse(localStorage.getItem("selectedRides")) || [];
 
-selectedRides.forEach(function(category) {
-    totalWalking += walkingDistances[category] || 0;
-});
-
-document.querySelectorAll(".route-summary strong")[1].textContent =
-    "🚶 " + totalWalking + " m";
+        const selectedTime =
+            localStorage.getItem("selectedTime") || "4 Hours";
 
 
-    // Show selected time
-    document.querySelector(".route-summary strong").textContent =
-        "⏱️ " + selectedTime;
+        // Walking distance for each ride category
+        const walkingDistances = {
+
+            "Thrill": 180,
+
+            "Water": 220,
+
+            "Family": 150,
+
+            "Kids": 120
+
+        };
 
 
-    // Ride details
-    const rides = {
-        "Thrill": {
-            type: "🎢 THRILL RIDE",
-            name: "Starfall Coaster",
-            wait: "10 min wait"
-        },
+        // Calculate total walking distance
+        let totalWalking = 0;
 
-        "Water": {
-            type: "🌊 WATER RIDE",
-            name: "River Rapids",
-            wait: "25 min wait"
-        },
+        selectedRides.forEach(function(category) {
 
-        "Family": {
-            type: "👨‍👩‍👧 FAMILY RIDE",
-            name: "Cloud Carousel",
-            wait: "8 min wait"
-        },
+            totalWalking += walkingDistances[category] || 0;
 
-        "Kids": {
-            type: "🧒 KIDS RIDE",
-            name: "Jungle Flyers",
-            wait: "12 min wait"
-        }
-    };
+        });
 
 
-    // Route cards
-    const routeList = document.querySelector(".route-list");
-
-    routeList.innerHTML = "";
-
-
-    selectedRides.forEach(function(category, index) {
-
-        if (rides[category]) {
-
-            const ride = rides[category];
-
-            const card = document.createElement("div");
-
-            card.className = "route-card";
-
-            card.innerHTML = `
-                <div class="route-number">${index + 1}</div>
-
-                <div class="route-info">
-                    <span>${ride.type}</span>
-
-                    <h2>${ride.name}</h2>
-
-                    <p>
-                        ⏱️ ${ride.wait}
-                        &nbsp; • &nbsp;
-                        🚶 Stop ${index + 1}
-                    </p>
-                </div>
-            `;
-
-            routeList.appendChild(card);
+        // Show selected time
+        document.querySelector(".route-summary strong").textContent =
+            "⏱️ " + selectedTime;
 
 
-            if (index < selectedRides.length - 1) {
+        // Show walking distance
+        document.querySelectorAll(".route-summary strong")[1].textContent =
+            "🚶 " + totalWalking + " m";
 
-                const line = document.createElement("div");
 
-                line.className = "route-line";
+        // Ride details
+        const rides = {
 
-                routeList.appendChild(line);
+            "Thrill": {
+
+                type: "🎢 THRILL RIDE",
+
+                name: "Starfall Coaster",
+
+                wait: "10 min wait",
+
+                crowd: "🟢 Low Crowd"
+
+            },
+
+
+            "Water": {
+
+                type: "🌊 WATER RIDE",
+
+                name: "River Rapids",
+
+                wait: "25 min wait",
+
+                crowd: "🔴 High Crowd"
+
+            },
+
+
+            "Family": {
+
+                type: "👨‍👩‍👧 FAMILY RIDE",
+
+                name: "Cloud Carousel",
+
+                wait: "8 min wait",
+
+                crowd: "🟡 Medium Crowd"
+
+            },
+
+
+            "Kids": {
+
+                type: "🧒 KIDS RIDE",
+
+                name: "Jungle Flyers",
+
+                wait: "12 min wait",
+
+                crowd: "🟢 Low Crowd"
+
             }
-        }
-    });
+
+        };
 
 
-    // Show number of stops
-    const stopsText =
-        document.querySelectorAll(".route-summary strong")[2];
+        // Route list
+        const routeList =
+            document.querySelector(".route-list");
 
-    stopsText.textContent =
-        "🎢 " + selectedRides.length;
-</script>
+
+        // Clear old route cards
+        routeList.innerHTML = "";
+
+
+        // Create route cards for selected rides
+        selectedRides.forEach(function(category, index) {
+
+            if (rides[category]) {
+
+                const ride = rides[category];
+
+
+                const card =
+                    document.createElement("div");
+
+
+                card.className =
+                    "route-card";
+
+
+                card.innerHTML = `
+
+                    <div class="route-number">
+                        ${index + 1}
+                    </div>
+
+                    <div class="route-info">
+
+                        <span>
+                            ${ride.type}
+                        </span>
+
+                        <h2>
+                            ${ride.name}
+                        </h2>
+
+                        <span>
+                            ${ride.crowd}
+                        </span>
+
+                        <p>
+                            ⏱️ ${ride.wait}
+                            &nbsp; • &nbsp;
+                            🚶 Stop ${index + 1}
+                        </p>
+
+                    </div>
+
+                `;
+
+
+                routeList.appendChild(card);
+
+
+                // Add line between rides
+                if (index < selectedRides.length - 1) {
+
+                    const line =
+                        document.createElement("div");
+
+                    line.className =
+                        "route-line";
+
+                    routeList.appendChild(line);
+
+                }
+
+            }
+
+        });
+
+
+        // Show number of selected stops
+        const stopsText =
+            document.querySelectorAll(
+                ".route-summary strong"
+            )[2];
+
+
+        stopsText.textContent =
+            "🎢 " + selectedRides.length;
+
+    </script>
+
 </body>
 </html>
