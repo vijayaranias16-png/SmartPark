@@ -650,3 +650,185 @@ footer p {
         margin-left: 38px;
     }
 }
+/* ================================
+   LIVE CROWD
+================================ */
+
+.crowd-page {
+    min-height: 100vh;
+    padding: 50px 7%;
+    background: linear-gradient(135deg, #17134d, #542078, #d62d75);
+}
+
+.crowd-header {
+    text-align: center;
+    color: white;
+    margin-bottom: 30px;
+}
+
+.crowd-header p {
+    color: #ffd21c;
+    font-weight: bold;
+    letter-spacing: 3px;
+}
+
+.crowd-header h1 {
+    font-size: 48px;
+    margin: 10px 0;
+}
+
+.crowd-header span {
+    color: #eee;
+    font-size: 18px;
+}
+
+.crowd-summary {
+    max-width: 1000px;
+    margin: auto;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 15px;
+}
+
+.crowd-box {
+    background: rgba(255,255,255,0.14);
+    border-radius: 18px;
+    padding: 22px;
+    text-align: center;
+    color: white;
+}
+
+.crowd-box strong {
+    display: block;
+    font-size: 30px;
+    color: #ffd21c;
+}
+
+.crowd-box small {
+    display: block;
+    margin-top: 7px;
+}
+
+.crowd-message {
+    max-width: 1000px;
+    margin: 25px auto;
+    padding: 18px;
+    border-radius: 15px;
+    background: white;
+    text-align: center;
+    font-weight: bold;
+    color: #542078;
+}
+
+.crowd-grid {
+    max-width: 1000px;
+    margin: auto;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 18px;
+}
+
+.crowd-card {
+    background: white;
+    border-radius: 20px;
+    padding: 20px;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    box-shadow: 0 10px 25px #0004;
+}
+
+.crowd-icon {
+    font-size: 42px;
+}
+
+.crowd-info {
+    flex: 1;
+}
+
+.crowd-info h2 {
+    margin: 0;
+    color: #17134d;
+    font-size: 20px;
+}
+
+.crowd-info p {
+    margin: 5px 0;
+    color: #777;
+}
+
+.wait-time {
+    font-size: 14px;
+    font-weight: bold;
+    color: #542078;
+}
+
+.crowd-status {
+    padding: 9px 13px;
+    border-radius: 20px;
+    font-weight: bold;
+    font-size: 13px;
+}
+
+.crowd-status.low {
+    background: #d9f7df;
+    color: #16853a;
+}
+
+.crowd-status.medium {
+    background: #fff1c7;
+    color: #a66a00;
+}
+
+.crowd-status.high {
+    background: #ffd9d9;
+    color: #c62828;
+}
+
+.crowd-refresh,
+.crowd-back {
+    display: block;
+    width: 100%;
+    max-width: 1000px;
+    margin: 20px auto 0;
+    padding: 16px;
+    border: none;
+    border-radius: 14px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.crowd-refresh {
+    background: linear-gradient(90deg, #ff20a8, #ffb300);
+    color: white;
+}
+
+.crowd-back {
+    background: white;
+    color: #542078;
+}
+
+@media (max-width: 700px) {
+
+    .crowd-page {
+        padding: 35px 5%;
+    }
+
+    .crowd-header h1 {
+        font-size: 36px;
+    }
+
+    .crowd-summary {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .crowd-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .crowd-card {
+        padding: 16px;
+    }
+
+}
