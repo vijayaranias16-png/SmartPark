@@ -96,6 +96,21 @@
 
     const selectedTime =
         localStorage.getItem("selectedTime") || "4 Hours";
+       const walkingDistances = {
+    "Thrill": 180,
+    "Water": 220,
+    "Family": 150,
+    "Kids": 120
+};
+
+let totalWalking = 0;
+
+selectedRides.forEach(function(category) {
+    totalWalking += walkingDistances[category] || 0;
+});
+
+document.querySelectorAll(".route-summary strong")[1].textContent =
+    "🚶 " + totalWalking + " m";
 
 
     // Show selected time
