@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Places - SmartPark</title>
+
+    <link rel="stylesheet"
+        href="https://vijayaranias16-png.github.io/SmartPark/style.css">
+</head>
+
+<body>
+
+    <div class="places-container">
+
+        <!-- HEADER -->
+        <div class="places-header">
+
+            <p>🎢 SMARTPARK</p>
+
+            <h1>Places to Visit 📍</h1>
+
+            <span>
+                Find everything you need inside the park.
+            </span>
+
+        </div>
+
+
+        <!-- SEARCH -->
+        <div class="place-search">
+
+            <input
+                type="text"
+                id="searchBox"
+                placeholder="🔍 Search places..."
+                onkeyup="searchPlaces()">
+
+        </div>
+
+
+        <!-- PLACE CATEGORIES -->
+        <div class="place-grid" id="placeGrid">
+
+
+            <!-- FOOD -->
+            <div class="place-card" data-name="Food">
+
+                <div class="place-icon">
+                    🍔
+                </div>
+
+                <div>
+                    <span>FOOD</span>
+
+                    <h2>Food Court</h2>
+
+                    <p>
+                        Enjoy delicious food and refreshments.
+                    </p>
+
+                    <small>
+                        📍 Park Food Area
+                    </small>
+                </div>
+
+                <button onclick="showPlace('Food Court')">
+                    View Location →
+                </button>
+
+            </div>
+
+
+            <!-- TOY SHOP -->
+            <div class="place-card" data-name="Toy Shop">
+
+                <div class="place-icon">
+                    🧸
+                </div>
+
+                <div>
+                    <span>SHOP</span>
+
+                    <h2>Toy Shop</h2>
+
+                    <p>
+                        Find fun toys and park souvenirs.
+                    </p>
+
+                    <small>
+                        📍 Shopping Area
+                    </small>
+                </div>
+
+                <button onclick="showPlace('Toy Shop')">
+                    View Location →
+                </button>
+
+            </div>
+
+
+            <!-- HOTEL -->
+            <div class="place-card" data-name="Hotel">
+
+                <div class="place-icon">
+                    🏨
+                </div>
+
+                <div>
+                    <span>STAY</span>
+
+                    <h2>Hotel</h2>
+
+                    <p>
+                        Relax and stay comfortably near the park.
+                    </p>
+
+                    <small>
+                        📍 Resort Area
+                    </small>
+                </div>
+
+                <button onclick="showPlace('Hotel')">
+                    View Location →
+                </button>
+
+            </div>
+
+
+            <!-- RESTROOM -->
+            <div class="place-card" data-name="Restroom">
+
+                <div class="place-icon">
+                    🚻
+                </div>
+
+                <div>
+                    <span>FACILITY</span>
+
+                    <h2>Restroom</h2>
+
+                    <p>
+                        Find the nearest restroom quickly.
+                    </p>
+
+                    <small>
+                        📍 Multiple Locations
+                    </small>
+                </div>
+
+                <button onclick="showPlace('Restroom')">
+                    View Location →
+                </button>
+
+            </div>
+
+
+            <!-- LOCKER -->
+            <div class="place-card" data-name="Locker">
+
+                <div class="place-icon">
+                    🔐
+                </div>
+
+                <div>
+                    <span>FACILITY</span>
+
+                    <h2>Locker</h2>
+
+                    <p>
+                        Store your belongings safely.
+                    </p>
+
+                    <small>
+                        📍 Locker Area
+                    </small>
+                </div>
+
+                <button onclick="showPlace('Locker')">
+                    View Location →
+                </button>
+
+            </div>
+
+
+            <!-- FIRST AID -->
+            <div class="place-card" data-name="First Aid">
+
+                <div class="place-icon">
+                    🩺
+                </div>
+
+                <div>
+                    <span>SAFETY</span>
+
+                    <h2>First Aid</h2>
+
+                    <p>
+                        Get assistance when you need it.
+                    </p>
+
+                    <small>
+                        📍 Medical Centre
+                    </small>
+                </div>
+
+                <button onclick="showPlace('First Aid')">
+                    View Location →
+                </button>
+
+            </div>
+
+        </div>
+
+
+        <!-- BACK BUTTON -->
+        <button class="places-back"
+            onclick="window.location.href='index.html'">
+
+            ← Back to Home
+
+        </button>
+
+    </div>
+
+
+    <script>
+
+        function searchPlaces() {
+
+            const search =
+                document.getElementById("searchBox")
+                    .value
+                    .toLowerCase();
+
+            const cards =
+                document.querySelectorAll(".place-card");
+
+            cards.forEach(function(card) {
+
+                const name =
+                    card.dataset.name.toLowerCase();
+
+                if (name.includes(search)) {
+
+                    card.style.display = "flex";
+
+                } else {
+
+                    card.style.display = "none";
+
+                }
+
+            });
+
+        }
+
+
+        function showPlace(placeName) {
+
+            alert(
+                "📍 " + placeName +
+                "\n\n" +
+                "Park location and navigation will be connected in the next stage."
+            );
+
+        }
+
+    </script>
+
+</body>
+
+</html>
