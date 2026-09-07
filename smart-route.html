@@ -11,7 +11,7 @@
     <title>Smart Route - SmartPark</title>
 
     <link rel="stylesheet"
-        href="https://vijayaranias16-png.github.io/SmartPark/style.css">
+        href="https://vijayaranias16-png.github.io/SmartPark/style.css?v=11">
 
 </head>
 
@@ -34,6 +34,7 @@
             </span>
 
         </div>
+
 
 
         <!-- SMART RECOMMENDATION -->
@@ -233,13 +234,16 @@
 
 
 
-    <script>
+    <!-- PARK DATA -->
 
+    <script src="park-data.js"></script>
+
+
+    <script>
 
         /* =====================================
            GET USER SELECTION
         ===================================== */
-
 
         const selectedRides =
             JSON.parse(
@@ -262,7 +266,6 @@
            WALKING DISTANCE
         ===================================== */
 
-
         const walkingDistances = {
 
             "Thrill": 180,
@@ -278,79 +281,154 @@
 
 
         /* =====================================
-           RIDE DATA
+           GET ACTUAL RIDE DATA
         ===================================== */
 
-
-        const rides = {
-
-            "Thrill": {
-
-                type: "🎢 THRILL RIDE",
-
-                name: "Starfall Coaster",
-
-                wait: 10,
-
-                crowd: "Low",
-
-                crowdIcon: "🟢"
-
-            },
+        const allRides =
+            window.parkData &&
+            Array.isArray(window.parkData.rides)
+                ? window.parkData.rides
+                : [];
 
 
-            "Water": {
 
-                type: "🌊 WATER RIDE",
+        /*
+           Get latest Admin update.
+           If Admin changed the ride,
+           use the updated wait/crowd.
+        */
 
-                name: "River Rapids",
+        function getRideData(ride) {
 
-                wait: 25,
-
-                crowd: "High",
-
-                crowdIcon: "🔴"
-
-            },
-
-
-            "Family": {
-
-                type: "👨‍👩‍👧 FAMILY RIDE",
-
-                name: "Cloud Carousel",
-
-                wait: 8,
-
-                crowd: "Medium",
-
-                crowdIcon: "🟡"
-
-            },
+            const saved =
+                JSON.parse(
+                    localStorage.getItem(
+                        "ride_" + ride.id
+                    )
+                );
 
 
-            "Kids": {
+            if (saved) {
 
-                type: "🧒 KIDS RIDE",
+                return {
 
-                name: "Jungle Flyers",
+                    ...ride,
 
-                wait: 12,
+                    people:
+                        saved.people ??
+                        ride.people,
 
-                crowd: "Low",
+                    wait:
+                        saved.wait ??
+                        ride.wait,
 
-                crowdIcon: "🟢"
+                    crowd:
+                        saved.crowd ??
+                        ride.crowd
+
+                };
 
             }
 
-        };
+
+            return ride;
+
+        }
+
+
+
+        /*
+           Only selected categories
+        */
+
+        let routeRides =
+            allRides
+                .filter(function(ride) {
+
+                    return selectedRides.includes(
+                        ride.category
+                    );
+
+                })
+                .map(getRideData);
+
+
+
+        /* =====================================
+           CROWD ICON
+        ===================================== */
+
+        function getCrowdIcon(crowd) {
+
+            if (crowd === "Low") {
+
+                return "🟢";
+
+            }
+
+            if (crowd === "Medium") {
+
+                return "🟡";
+
+            }
+
+            if (crowd === "High") {
+
+                return "🔴";
+
+            }
+
+            return "⚪";
+
+        }
+
+
+
+        /* =====================================
+           RIDE TYPE ICON
+        ===================================== */
+
+        function getRideIcon(ride) {
+
+            if (ride.icon) {
+
+                return ride.icon;
+
+            }
+
+            if (ride.category === "Thrill") {
+
+                return "🎢";
+
+            }
+
+            if (ride.category === "Water") {
+
+                return "🌊";
+
+            }
+
+            if (ride.category === "Family") {
+
+                return "👨‍👩‍👧";
+
+            }
+
+            if (ride.category === "Kids") {
+
+                return "🧒";
+
+            }
+
+            return "🎢";
+
+        }
 
 
 
         /* =====================================
            CALCULATE WALKING
         ===================================== */
-
 
         let totalWalking = 0;
 
@@ -373,7 +451,6 @@
            SHOW SELECTED TIME
         ===================================== */
 
-
         document.getElementById("total-time")
             .textContent =
             "⏱️ " + selectedTime;
@@ -384,17 +461,15 @@
            SHOW NUMBER OF STOPS
         ===================================== */
 
-
         document.getElementById("total-stops")
             .textContent =
-            "🎢 " + selectedRides.length;
+            "🎢 " + routeRides.length;
 
 
 
         /* =====================================
            CONVERT TIME
         ===================================== */
-
 
         let availableMinutes = 240;
 
@@ -429,27 +504,22 @@
            ESTIMATE TOTAL RIDE TIME
         ===================================== */
 
-
         let totalWait = 0;
 
 
-        selectedRides.forEach(function(category) {
+        routeRides.forEach(function(ride) {
 
-            if (rides[category]) {
-
-                totalWait +=
-                    rides[category].wait;
-
-            }
+            totalWait +=
+                Number(ride.wait) || 0;
 
         });
 
 
-        const walkingTime =
+        let walkingTime =
             Math.ceil(totalWalking / 80);
 
 
-        const estimatedTotalTime =
+        let estimatedTotalTime =
             totalWait + walkingTime;
 
 
@@ -457,7 +527,6 @@
         /* =====================================
            TIME BUDGET MESSAGE
         ===================================== */
-
 
         const timeBudgetTitle =
             document.getElementById(
@@ -479,6 +548,18 @@
 
             timeBudgetText.textContent =
                 "Go back and select your preferred rides.";
+
+        }
+
+
+        else if (routeRides.length === 0) {
+
+            timeBudgetTitle.textContent =
+                "No rides available";
+
+
+            timeBudgetText.textContent =
+                "No rides were found for your selected categories.";
 
         }
 
@@ -520,27 +601,17 @@
            SMART RECOMMENDATION
         ===================================== */
 
-
         let bestRide = null;
 
 
-        selectedRides.forEach(function(category) {
-
-            if (!rides[category]) {
-
-                return;
-
-            }
-
-
-            const ride =
-                rides[category];
-
+        routeRides.forEach(function(ride) {
 
             if (
                 bestRide === null
                 ||
-                ride.wait < bestRide.wait
+                Number(ride.wait)
+                <
+                Number(bestRide.wait)
             ) {
 
                 bestRide = ride;
@@ -566,11 +637,14 @@
         if (bestRide) {
 
             recommendationTitle.textContent =
-                "Try " + bestRide.name + " first! 🎢";
+                "Try "
+                + bestRide.name
+                + " first! "
+                + getRideIcon(bestRide);
 
 
             recommendationText.textContent =
-                bestRide.crowdIcon
+                getCrowdIcon(bestRide.crowd)
                 + " "
                 + bestRide.crowd
                 + " crowd • "
@@ -588,7 +662,7 @@
 
 
             recommendationText.textContent =
-                "SmartPark will recommend the best ride based on waiting time and crowd.";
+                "SmartPark will recommend the best ride based on current waiting time and crowd.";
 
         }
 
@@ -598,25 +672,16 @@
            LIVE CROWD DISPLAY
         ===================================== */
 
-
         const crowdList =
             document.getElementById(
                 "crowd-status-list"
             );
 
 
-        selectedRides.forEach(function(category) {
-
-            if (!rides[category]) {
-
-                return;
-
-            }
+        crowdList.innerHTML = "";
 
 
-            const ride =
-                rides[category];
-
+        routeRides.forEach(function(ride) {
 
             const crowdCard =
                 document.createElement("div");
@@ -643,6 +708,7 @@
                         font-size:17px;
                     ">
 
+                        ${getRideIcon(ride)}
                         ${ride.name}
 
                     </strong>
@@ -663,7 +729,7 @@
                     font-size:14px;
                 ">
 
-                    ${ride.crowdIcon}
+                    ${getCrowdIcon(ride.crowd)}
                     ${ride.crowd}
 
                 </div>
@@ -677,7 +743,7 @@
 
 
 
-        if (selectedRides.length === 0) {
+        if (routeRides.length === 0) {
 
             crowdList.innerHTML = `
 
@@ -701,7 +767,6 @@
            CREATE ROUTE CARDS
         ===================================== */
 
-
         const routeList =
             document.querySelector(
                 ".route-list"
@@ -711,19 +776,8 @@
         routeList.innerHTML = "";
 
 
-        selectedRides.forEach(
-            function(category, index) {
-
-
-                if (!rides[category]) {
-
-                    return;
-
-                }
-
-
-                const ride =
-                    rides[category];
+        routeRides.forEach(
+            function(ride, index) {
 
 
                 const card =
@@ -749,7 +803,8 @@
 
                         <span>
 
-                            ${ride.type}
+                            ${getRideIcon(ride)}
+                            ${ride.category} RIDE
 
                         </span>
 
@@ -763,7 +818,7 @@
 
                         <span>
 
-                            ${ride.crowdIcon}
+                            ${getCrowdIcon(ride.crowd)}
                             ${ride.crowd} Crowd
 
                         </span>
@@ -775,7 +830,7 @@
 
                             &nbsp; • &nbsp;
 
-                            🚶 ${walkingDistances[category] || 0} m walking
+                            🚶 ${walkingDistances[ride.category] || 0} m walking
 
                         </p>
 
@@ -789,7 +844,7 @@
 
                 if (
                     index <
-                    selectedRides.length - 1
+                    routeRides.length - 1
                 ) {
 
 
@@ -818,8 +873,7 @@
            NO RIDE MESSAGE
         ===================================== */
 
-
-        if (selectedRides.length === 0) {
+        if (routeRides.length === 0) {
 
             routeList.innerHTML = `
 
