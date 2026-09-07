@@ -1,5 +1,4 @@
-const parkData = {
-
+window.parkData = {
     rides: [
 
         {
