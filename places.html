@@ -8,268 +8,449 @@
     <title>Places - SmartPark</title>
 
     <link rel="stylesheet"
-    href="https://vijayaranias16-png.github.io/SmartPark/style.css?v=10">
+        href="https://vijayaranias16-png.github.io/SmartPark/style.css?v=10">
+
+    <style>
+        .place-card {
+            cursor: pointer;
+        }
+
+        .place-details {
+            display: none;
+            max-width: 1000px;
+            margin: 30px auto;
+        }
+
+        .place-details h2 {
+            color: white;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .items-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+        }
+
+        .item-card {
+            background: white;
+            padding: 18px;
+            border-radius: 15px;
+            box-shadow: 0 8px 20px #0003;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .item-name {
+            font-weight: bold;
+            color: #17134d;
+        }
+
+        .item-price {
+            color: #d62d75;
+            font-weight: bold;
+        }
+
+        .back-places {
+            display: block;
+            margin: 25px auto;
+            padding: 13px 25px;
+            border: none;
+            border-radius: 12px;
+            background: white;
+            color: #542078;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        @media (max-width: 700px) {
+            .items-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
 </head>
 
 <body>
 
-    <div class="places-page">
+<div class="places-page">
 
-        <!-- HEADER -->
-        <div class="places-header">
+    <!-- HEADER -->
+    <div class="places-header">
 
-            <p>🎢 SMARTPARK</p>
+        <p>🎢 SMARTPARK</p>
 
-            <h1>Places to Visit 📍</h1>
+        <h1>Places to Visit</h1>
 
-            <span>
-                Find everything you need inside the park.
-            </span>
+        <span>
+            Find everything you need inside the park.
+        </span>
 
-        </div>
+    </div>
 
 
-        <!-- SEARCH -->
-        <div class="places-search">
+    <!-- SEARCH -->
+    <div class="places-search">
 
-            <input
-                type="text"
-                id="searchBox"
-                placeholder="🔍 Search places..."
-                onkeyup="searchPlaces()">
+        <input
+            type="text"
+            id="searchBox"
+            placeholder="🔍 Search places..."
+            onkeyup="searchPlaces()">
 
-        </div>
+    </div>
 
 
-        <!-- PLACE CATEGORIES -->
-        <div class="places-grid" id="placeGrid">
+    <!-- PLACES -->
+    <div class="places-grid" id="placeGrid">
 
+        <div class="place-card"
+             data-name="Food"
+             onclick="openPlace('Food Court')">
 
-            <!-- FOOD -->
-            <div class="place-card" data-name="Food">
+            <div class="place-icon">🍔</div>
 
-                <div class="place-icon">
-                    🍔
-                </div>
-
-                <div>
-                    <span>FOOD</span>
-
-                    <h2>Food Court</h2>
-
-                    <p>
-                        Enjoy delicious food and refreshments.
-                    </p>
-
-                    <small>
-                        📍 Park Food Area
-                    </small>
-                </div>
-
-                <button onclick="showPlace('Food Court')">
-                    View Location →
-                </button>
-
-            </div>
-
-
-            <!-- TOY SHOP -->
-            <div class="place-card" data-name="Toy Shop">
-
-                <div class="place-icon">
-                    🧸
-                </div>
-
-                <div>
-                    <span>SHOP</span>
-
-                    <h2>Toy Shop</h2>
-
-                    <p>
-                        Find fun toys and park souvenirs.
-                    </p>
-
-                    <small>
-                        📍 Shopping Area
-                    </small>
-                </div>
-
-                <button onclick="showPlace('Toy Shop')">
-                    View Location →
-                </button>
-
-            </div>
-
-
-            <!-- HOTEL -->
-            <div class="place-card" data-name="Hotel">
-
-                <div class="place-icon">
-                    🏨
-                </div>
-
-                <div>
-                    <span>STAY</span>
-
-                    <h2>Hotel</h2>
-
-                    <p>
-                        Relax and stay comfortably near the park.
-                    </p>
-
-                    <small>
-                        📍 Resort Area
-                    </small>
-                </div>
-
-                <button onclick="showPlace('Hotel')">
-                    View Location →
-                </button>
-
-            </div>
-
-
-            <!-- RESTROOM -->
-            <div class="place-card" data-name="Restroom">
-
-                <div class="place-icon">
-                    🚻
-                </div>
-
-                <div>
-                    <span>FACILITY</span>
-
-                    <h2>Restroom</h2>
-
-                    <p>
-                        Find the nearest restroom quickly.
-                    </p>
-
-                    <small>
-                        📍 Multiple Locations
-                    </small>
-                </div>
-
-                <button onclick="showPlace('Restroom')">
-                    View Location →
-                </button>
-
-            </div>
-
-
-            <!-- LOCKER -->
-            <div class="place-card" data-name="Locker">
-
-                <div class="place-icon">
-                    🔐
-                </div>
-
-                <div>
-                    <span>FACILITY</span>
-
-                    <h2>Locker</h2>
-
-                    <p>
-                        Store your belongings safely.
-                    </p>
-
-                    <small>
-                        📍 Locker Area
-                    </small>
-                </div>
-
-                <button onclick="showPlace('Locker')">
-                    View Location →
-                </button>
-
-            </div>
-
-
-            <!-- FIRST AID -->
-            <div class="place-card" data-name="First Aid">
-
-                <div class="place-icon">
-                    🩺
-                </div>
-
-                <div>
-                    <span>SAFETY</span>
-
-                    <h2>First Aid</h2>
-
-                    <p>
-                        Get assistance when you need it.
-                    </p>
-
-                    <small>
-                        📍 Medical Centre
-                    </small>
-                </div>
-
-                <button onclick="showPlace('First Aid')">
-                    View Location →
-                </button>
-
+            <div>
+                <span>FOOD</span>
+                <h2>Food Court</h2>
+                <p>Enjoy delicious food and refreshments.</p>
             </div>
 
         </div>
 
 
-        <!-- BACK BUTTON -->
-        <button class="places-back"
-            onclick="window.location.href='index.html'">
+        <div class="place-card"
+             data-name="Toy Shop"
+             onclick="openPlace('Toy Shop')">
 
-            ← Back to Home
+            <div class="place-icon">🧸</div>
 
+            <div>
+                <span>SHOP</span>
+                <h2>Toy Shop</h2>
+                <p>Find fun toys and park souvenirs.</p>
+            </div>
+
+        </div>
+
+
+        <div class="place-card"
+             data-name="Hotel"
+             onclick="openPlace('Hotel')">
+
+            <div class="place-icon">🏨</div>
+
+            <div>
+                <span>STAY</span>
+                <h2>Hotel</h2>
+                <p>Relax and stay comfortably near the park.</p>
+            </div>
+
+        </div>
+
+
+        <div class="place-card"
+             data-name="Restroom"
+             onclick="openPlace('Restroom')">
+
+            <div class="place-icon">🚻</div>
+
+            <div>
+                <span>FACILITY</span>
+                <h2>Restroom</h2>
+                <p>Find the nearest restroom quickly.</p>
+            </div>
+
+        </div>
+
+
+        <div class="place-card"
+             data-name="Locker"
+             onclick="openPlace('Locker')">
+
+            <div class="place-icon">🔐</div>
+
+            <div>
+                <span>FACILITY</span>
+                <h2>Locker</h2>
+                <p>Store your belongings safely.</p>
+            </div>
+
+        </div>
+
+
+        <div class="place-card"
+             data-name="First Aid"
+             onclick="openPlace('First Aid')">
+
+            <div class="place-icon">🩺</div>
+
+            <div>
+                <span>SAFETY</span>
+                <h2>First Aid</h2>
+                <p>Get assistance when you need it.</p>
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- DETAILS -->
+    <div class="place-details" id="placeDetails">
+
+        <h2 id="detailTitle"></h2>
+
+        <div class="items-grid" id="itemsGrid"></div>
+
+        <button class="back-places"
+                onclick="backToPlaces()">
+            ← Back to Places
         </button>
 
     </div>
 
 
-    <script>
+    <!-- BACK HOME -->
+    <button class="places-back"
+            onclick="window.location.href='index.html'">
 
-        function searchPlaces() {
+        ← Back to Home
 
-            const search =
-                document.getElementById("searchBox")
-                    .value
-                    .toLowerCase();
+    </button>
 
-            const cards =
-                document.querySelectorAll(".place-card");
+</div>
 
-            cards.forEach(function(card) {
 
-                const name =
-                    card.dataset.name.toLowerCase();
+<script>
 
-                if (name.includes(search)) {
+const placeItems = {
 
-                    card.style.display = "flex";
+    "Food Court": [
+        ["🍔", "Burger", "₹120"],
+        ["🍕", "Pizza", "₹180"],
+        ["🌭", "Hot Dog", "₹100"],
+        ["🍟", "French Fries", "₹80"],
+        ["🥪", "Sandwich", "₹90"],
+        ["🍗", "Chicken Wings", "₹160"],
+        ["🍿", "Popcorn", "₹70"],
+        ["🌮", "Taco", "₹110"],
+        ["🍜", "Noodles", "₹130"],
+        ["🍚", "Fried Rice", "₹140"],
+        ["🥤", "Cold Drink", "₹60"],
+        ["🧃", "Fruit Juice", "₹80"],
+        ["🍦", "Ice Cream", "₹70"],
+        ["🍩", "Donut", "₹60"],
+        ["🧁", "Cupcake", "₹60"],
+        ["🍫", "Chocolate", "₹50"],
+        ["🍉", "Fruit Bowl", "₹90"],
+        ["☕", "Coffee", "₹60"],
+        ["🥛", "Milkshake", "₹100"],
+        ["🍰", "Cake Slice", "₹90"]
+    ],
 
-                } else {
+    "Toy Shop": [
+        ["🧸", "Teddy Bear", "₹250"],
+        ["🚗", "Toy Car", "₹150"],
+        ["🪀", "Yo-Yo", "₹80"],
+        ["🧩", "Puzzle", "₹120"],
+        ["🎨", "Drawing Kit", "₹180"],
+        ["🏎️", "Racing Car", "₹220"],
+        ["🪆", "Doll", "₹200"],
+        ["⚽", "Football", "₹180"],
+        ["🧱", "Building Blocks", "₹300"],
+        ["🎮", "Mini Game", "₹250"],
+        ["🦖", "Dinosaur Toy", "₹220"],
+        ["🤖", "Robot Toy", "₹350"],
+        ["🚁", "Toy Helicopter", "₹280"],
+        ["🛩️", "Toy Plane", "₹200"],
+        ["🎲", "Board Game", "₹250"],
+        ["🎯", "Target Game", "₹180"],
+        ["🪁", "Kite", "₹70"],
+        ["🫧", "Bubble Set", "₹60"],
+        ["🎈", "Balloon Set", "₹50"],
+        ["🧸", "Mini Plush Toy", "₹150"]
+    ],
 
-                    card.style.display = "none";
+    "Hotel": [
+        ["🛏️", "Standard Room", "₹1500"],
+        ["🛏️", "Deluxe Room", "₹2200"],
+        ["🏨", "Family Room", "₹2800"],
+        ["🛋️", "Premium Room", "₹3200"],
+        ["🛏️", "Twin Room", "₹2000"],
+        ["🍳", "Breakfast", "₹250"],
+        ["🍽️", "Lunch", "₹350"],
+        ["🍛", "Dinner", "₹400"],
+        ["☕", "Coffee Service", "₹100"],
+        ["🧃", "Refreshment", "₹120"],
+        ["🧺", "Laundry", "₹200"],
+        ["🧹", "Room Service", "₹150"],
+        ["📶", "Wi-Fi", "Free"],
+        ["🚗", "Parking", "Free"],
+        ["❄️", "AC Service", "Included"],
+        ["📺", "TV", "Included"],
+        ["🚿", "Hot Water", "Included"],
+        ["🛎️", "Reception", "24 Hours"],
+        ["🧴", "Toiletries", "Included"],
+        ["🛡️", "Security", "24 Hours"]
+    ],
 
-                }
+    "Restroom": [
+        ["🚻", "Men's Restroom", "Available"],
+        ["🚺", "Women's Restroom", "Available"],
+        ["♿", "Accessible Restroom", "Available"],
+        ["👶", "Baby Care Area", "Available"],
+        ["🧼", "Hand Wash", "Available"],
+        ["🧴", "Soap", "Available"],
+        ["🧻", "Tissue", "Available"],
+        ["💧", "Water", "Available"],
+        ["🪞", "Mirror", "Available"],
+        ["🧹", "Cleaning Service", "Available"],
+        ["🚰", "Wash Basin", "Available"],
+        ["🗑️", "Waste Bin", "Available"],
+        ["💡", "Lighting", "Available"],
+        ["🌬️", "Ventilation", "Available"],
+        ["🧴", "Hand Sanitizer", "Available"],
+        ["🚪", "Private Cubicle", "Available"],
+        ["🧽", "Cleaning", "Regular"],
+        ["🪥", "Care Station", "Available"],
+        ["📢", "Help Facility", "Available"],
+        ["🛡️", "Safety", "Available"]
+    ],
 
-            });
+    "Locker": [
+        ["🔐", "Small Locker", "₹50"],
+        ["🔐", "Medium Locker", "₹80"],
+        ["🔐", "Large Locker", "₹120"],
+        ["🗄️", "Family Locker", "₹150"],
+        ["🔑", "Key Locker", "₹60"],
+        ["🔒", "Digital Locker", "₹100"],
+        ["🎒", "Bag Locker", "₹80"],
+        ["🧳", "Luggage Locker", "₹150"],
+        ["📦", "Storage Box", "₹70"],
+        ["🔐", "Premium Locker", "₹200"],
+        ["👜", "Small Bag Space", "₹50"],
+        ["🎒", "School Bag Space", "₹60"],
+        ["🧳", "Travel Bag Space", "₹100"],
+        ["📱", "Mobile Locker", "₹40"],
+        ["💼", "Laptop Locker", "₹100"],
+        ["👟", "Shoe Locker", "₹40"],
+        ["🛍️", "Shopping Bag Locker", "₹50"],
+        ["🎁", "Gift Storage", "₹70"],
+        ["📦", "Extra Storage", "₹100"],
+        ["🔑", "Locker Key Replacement", "₹50"]
+    ],
+
+    "First Aid": [
+        ["🩹", "Bandage", "Available"],
+        ["🧴", "Antiseptic", "Available"],
+        ["🧤", "Medical Gloves", "Available"],
+        ["🌡️", "Temperature Check", "Available"],
+        ["🩺", "Basic Check-up", "Available"],
+        ["🪑", "Rest Area", "Available"],
+        ["💧", "Drinking Water", "Available"],
+        ["😷", "Face Mask", "Available"],
+        ["🧼", "Hand Sanitizer", "Available"],
+        ["🧻", "Medical Tissue", "Available"],
+        ["🧰", "First Aid Kit", "Available"],
+        ["🚑", "Emergency Support", "Available"],
+        ["📞", "Emergency Call", "Available"],
+        ["👨‍⚕️", "Medical Staff", "Available"],
+        ["🩼", "Walking Support", "Available"],
+        ["🧊", "Cold Pack", "Available"],
+        ["🩺", "BP Check", "Available"],
+        ["🧴", "Cleaning Solution", "Available"],
+        ["🛏️", "Rest Bed", "Available"],
+        ["🛡️", "Safety Assistance", "Available"]
+    ]
+
+};
+
+
+function openPlace(placeName) {
+
+    document.getElementById("placeGrid").style.display = "none";
+
+    document.querySelector(".places-search").style.display = "none";
+
+    document.querySelector(".places-header").style.display = "none";
+
+    document.getElementById("detailTitle").innerText =
+        "✨ " + placeName;
+
+    const itemsGrid =
+        document.getElementById("itemsGrid");
+
+    itemsGrid.innerHTML = "";
+
+    placeItems[placeName].forEach(function(item) {
+
+        itemsGrid.innerHTML += `
+            <div class="item-card">
+
+                <span class="item-name">
+                    ${item[0]} ${item[1]}
+                </span>
+
+                <span class="item-price">
+                    ${item[2]}
+                </span>
+
+            </div>
+        `;
+
+    });
+
+    document.getElementById("placeDetails").style.display = "block";
+
+}
+
+
+function backToPlaces() {
+
+    document.getElementById("placeDetails").style.display = "none";
+
+    document.getElementById("placeGrid").style.display = "grid";
+
+    document.querySelector(".places-search").style.display = "block";
+
+    document.querySelector(".places-header").style.display = "block";
+
+}
+
+
+function searchPlaces() {
+
+    const search =
+        document.getElementById("searchBox")
+        .value
+        .toLowerCase();
+
+    const cards =
+        document.querySelectorAll(".place-card");
+
+    cards.forEach(function(card) {
+
+        const name =
+            card.dataset.name.toLowerCase();
+
+        if (name.includes(search)) {
+
+            card.style.display = "flex";
+
+        } else {
+
+            card.style.display = "none";
 
         }
 
+    });
 
-        function showPlace(placeName) {
+}
 
-            alert(
-                "📍 " + placeName +
-                "\n\n" +
-                "Park location and navigation will be connected in the next stage."
-            );
-
-        }
-
-    </script>
+</script>
 
 </body>
-
 </html>
