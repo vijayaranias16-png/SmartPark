@@ -8,10 +8,156 @@
     <title>Admin Dashboard - SmartPark</title>
 
     <link rel="stylesheet"
-          href="https://vijayaranias16-png.github.io/SmartPark/style.css">
+          href="https://vijayaranias16-png.github.io/SmartPark/style.css?v=16">
+
+    <style>
+
+        /* =========================
+           ADMIN LOGIN
+        ========================= */
+
+        #loginPage {
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: linear-gradient(135deg, #542078, #d62d75);
+            padding: 20px;
+            box-sizing: border-box;
+        }
+
+        .login-card {
+            background: white;
+            width: 100%;
+            max-width: 420px;
+            padding: 40px;
+            border-radius: 22px;
+            box-shadow: 0 15px 40px rgba(0,0,0,0.25);
+            text-align: center;
+            box-sizing: border-box;
+        }
+
+        .login-icon {
+            font-size: 55px;
+            margin-bottom: 10px;
+        }
+
+        .login-card h1 {
+            margin-bottom: 8px;
+            color: #542078;
+        }
+
+        .login-card p {
+            color: #666;
+            margin-bottom: 25px;
+        }
+
+        .login-card input {
+            width: 100%;
+            padding: 14px;
+            margin-bottom: 15px;
+            border: 2px solid #eee;
+            border-radius: 10px;
+            box-sizing: border-box;
+            font-size: 16px;
+        }
+
+        .login-card button {
+            width: 100%;
+            padding: 14px;
+            border: none;
+            border-radius: 10px;
+            background: linear-gradient(135deg, #542078, #d62d75);
+            color: white;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .login-error {
+            color: #d62d75;
+            font-weight: bold;
+            margin-top: 15px;
+            display: none;
+        }
+
+        /* =========================
+           HIDE ADMIN UNTIL LOGIN
+        ========================= */
+
+        #adminPage {
+            display: none;
+        }
+
+        .logout-btn {
+            margin-left: 10px;
+            padding: 8px 14px;
+            border: none;
+            border-radius: 8px;
+            background: #d62d75;
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+    </style>
+
 </head>
 
 <body>
+
+
+<!-- ==================================================
+     ADMIN LOGIN PAGE
+================================================== -->
+
+<div id="loginPage">
+
+    <div class="login-card">
+
+        <div class="login-icon">
+            🔐
+        </div>
+
+        <h1>SmartPark Admin</h1>
+
+        <p>Admin access only</p>
+
+        <input
+            type="text"
+            id="adminUsername"
+            placeholder="Username"
+        >
+
+        <input
+            type="password"
+            id="adminPassword"
+            placeholder="Password"
+        >
+
+        <button onclick="adminLogin()">
+            🔓 Login
+        </button>
+
+        <div
+            id="loginError"
+            class="login-error"
+        >
+            ❌ Invalid username or password
+        </div>
+
+    </div>
+
+</div>
+
+
+
+<!-- ==================================================
+     ADMIN DASHBOARD
+================================================== -->
+
+<div id="adminPage">
+
 
 <nav class="navbar">
 
@@ -20,27 +166,56 @@
     </div>
 
     <div class="nav-links">
-        <a href="index.html">Home</a>
-        <a href="live-crowd.html">Live Crowd</a>
+
+        <a href="index.html">
+            Home
+        </a>
+
+        <a href="live-crowd.html">
+            Live Crowd
+        </a>
+
+        <button
+            class="logout-btn"
+            onclick="adminLogout()"
+        >
+            Logout
+        </button>
+
     </div>
 
 </nav>
 
 
+
 <div class="crowd-page">
+
+
+    <!-- =========================
+         HEADER
+    ========================= -->
 
     <div class="crowd-header">
 
-        <p>SMARTPARK CONTROL PANEL</p>
+        <p>
+            SMARTPARK CONTROL PANEL
+        </p>
 
-        <h1>👨‍💼 Admin Dashboard</h1>
+        <h1>
+            👨‍💼 Admin Dashboard
+        </h1>
 
-        <span>Manage all ride crowd information</span>
+        <span>
+            Manage all ride crowd information
+        </span>
 
     </div>
 
 
-    <!-- TICKET COUNT -->
+
+    <!-- =========================
+         TICKET COUNT
+    ========================= -->
 
     <div class="crowd-message">
 
@@ -63,55 +238,95 @@
             "
         >
 
-        <button onclick="updateTickets()"
-                style="
-                    padding:12px 20px;
-                    margin-left:10px;
-                    border:none;
-                    border-radius:10px;
-                    background:#542078;
-                    color:white;
-                    font-weight:bold;
-                    cursor:pointer;
-                ">
+        <button
+            onclick="updateTickets()"
+            style="
+                padding:12px 20px;
+                margin-left:10px;
+                border:none;
+                border-radius:10px;
+                background:#542078;
+                color:white;
+                font-weight:bold;
+                cursor:pointer;
+            "
+        >
             Update
         </button>
 
     </div>
 
 
-    <!-- PARK SUMMARY -->
+
+    <!-- =========================
+         PARK SUMMARY
+    ========================= -->
 
     <div class="crowd-summary">
 
         <div class="crowd-box">
-            <strong id="tickets">0</strong>
-            <small>Tickets Taken</small>
+
+            <strong id="tickets">
+                0
+            </strong>
+
+            <small>
+                Tickets Taken
+            </small>
+
         </div>
 
-        <div class="crowd-box">
-            <strong id="crowdLevel">Low</strong>
-            <small>Overall Crowd</small>
-        </div>
 
         <div class="crowd-box">
-            <strong id="lastUpdated">--</strong>
-            <small>Last Updated</small>
+
+            <strong id="crowdLevel">
+                Low
+            </strong>
+
+            <small>
+                Overall Crowd
+            </small>
+
+        </div>
+
+
+        <div class="crowd-box">
+
+            <strong id="lastUpdated">
+                --
+            </strong>
+
+            <small>
+                Last Updated
+            </small>
+
         </div>
 
     </div>
 
 
-    <div class="crowd-message" id="adminMessage">
+
+    <div
+        class="crowd-message"
+        id="adminMessage"
+    >
         📢 Update ticket count to see the crowd message.
     </div>
 
 
-    <!-- RIDES -->
 
-    <div class="crowd-header" style="margin-top:40px;">
+    <!-- =========================
+         RIDES
+    ========================= -->
 
-        <p>RIDE MANAGEMENT</p>
+    <div
+        class="crowd-header"
+        style="margin-top:40px;"
+    >
+
+        <p>
+            RIDE MANAGEMENT
+        </p>
 
         <h1 style="font-size:35px;">
             🎢 Update Ride Status
@@ -120,210 +335,382 @@
     </div>
 
 
-    <div class="crowd-grid" id="adminRideGrid"></div>
+
+    <div
+        class="crowd-grid"
+        id="adminRideGrid"
+    ></div>
 
 
-    <button class="crowd-back"
-            onclick="window.location.href='index.html'">
+
+    <button
+        class="crowd-back"
+        onclick="window.location.href='index.html'"
+    >
         ← Back to Home
     </button>
+
+
+</div>
 
 </div>
 
 
+
+<!-- ==================================================
+     PARK DATA
+================================================== -->
+
 <script src="park-data.js"></script>
+
 
 <script>
 
+/* ==================================================
+   ADMIN LOGIN
+================================================== */
 
-/* ================================
-   DISPLAY ALL RIDES
-================================ */
+function adminLogin() {
 
-function loadRides() {
+    const username =
+        document.getElementById(
+            "adminUsername"
+        ).value.trim();
 
-    const grid =
-        document.getElementById("adminRideGrid");
-
-    grid.innerHTML = "";
-
-
-    parkData.rides.forEach(function(ride, index) {
-
-        const saved =
-            JSON.parse(
-                localStorage.getItem("ride_" + ride.id)
-            );
+    const password =
+        document.getElementById(
+            "adminPassword"
+        ).value;
 
 
-        const people =
-            saved ? saved.people : 0;
+    /*
+       DEMO ADMIN CREDENTIALS
+    */
 
-        const wait =
-            saved ? saved.wait : ride.wait;
+    if (
+        username === "admin" &&
+        password === "smartpark123"
+    ) {
 
-        const crowd =
-            saved ? saved.crowd : ride.crowd;
+        sessionStorage.setItem(
+            "adminLoggedIn",
+            "true"
+        );
 
+        document.getElementById(
+            "loginPage"
+        ).style.display = "none";
 
-        const card =
-            document.createElement("div");
-
-        card.className = "crowd-card";
-
-
-        card.style.display = "block";
-
-
-        card.innerHTML = `
-
-            <div style="
-                display:flex;
-                align-items:center;
-                gap:15px;
-                margin-bottom:18px;
-            ">
-
-                <div class="crowd-icon">
-                    ${ride.icon}
-                </div>
-
-                <div class="crowd-info">
-
-                    <h2>
-                        ${ride.name}
-                    </h2>
-
-                    <p>
-                        ${ride.type} Ride
-                    </p>
-
-                </div>
-
-            </div>
+        document.getElementById(
+            "adminPage"
+        ).style.display = "block";
 
 
-            <label style="
-                display:block;
-                margin-bottom:8px;
-                font-weight:bold;
-            ">
-                👥 Current People
-            </label>
+        loadRides();
 
+        loadTicketData();
 
-            <input
-                type="number"
-                id="people_${ride.id}"
-                value="${people}"
-                min="0"
-                style="
-                    width:100%;
-                    padding:12px;
-                    box-sizing:border-box;
-                    border:2px solid #eee;
-                    border-radius:10px;
-                    margin-bottom:15px;
-                "
-            >
+    }
 
+    else {
 
-            <label style="
-                display:block;
-                margin-bottom:8px;
-                font-weight:bold;
-            ">
-                ⏱️ Wait Time (minutes)
-            </label>
+        document.getElementById(
+            "loginError"
+        ).style.display = "block";
 
-
-            <input
-                type="number"
-                id="wait_${ride.id}"
-                value="${wait}"
-                min="0"
-                style="
-                    width:100%;
-                    padding:12px;
-                    box-sizing:border-box;
-                    border:2px solid #eee;
-                    border-radius:10px;
-                    margin-bottom:15px;
-                "
-            >
-
-
-            <label style="
-                display:block;
-                margin-bottom:8px;
-                font-weight:bold;
-            ">
-                👥 Crowd Status
-            </label>
-
-
-            <select
-                id="crowd_${ride.id}"
-                style="
-                    width:100%;
-                    padding:12px;
-                    border:2px solid #eee;
-                    border-radius:10px;
-                    margin-bottom:15px;
-                "
-            >
-
-                <option value="Low"
-                    ${crowd === "Low" ? "selected" : ""}>
-                    🟢 Low
-                </option>
-
-                <option value="Medium"
-                    ${crowd === "Medium" ? "selected" : ""}>
-                    🟡 Medium
-                </option>
-
-                <option value="High"
-                    ${crowd === "High" ? "selected" : ""}>
-                    🔴 High
-                </option>
-
-            </select>
-
-
-            <button
-                onclick="updateRide('${ride.id}')"
-                style="
-                    width:100%;
-                    padding:13px;
-                    border:none;
-                    border-radius:10px;
-                    background:linear-gradient(
-                        135deg,
-                        #542078,
-                        #d62d75
-                    );
-                    color:white;
-                    font-weight:bold;
-                    cursor:pointer;
-                "
-            >
-                💾 Update ${ride.name}
-            </button>
-
-        `;
-
-
-        grid.appendChild(card);
-
-    });
+    }
 
 }
 
 
-/* ================================
+/* ==================================================
+   CHECK LOGIN
+================================================== */
+
+function checkAdminLogin() {
+
+    const loggedIn =
+        sessionStorage.getItem(
+            "adminLoggedIn"
+        );
+
+
+    if (loggedIn === "true") {
+
+        document.getElementById(
+            "loginPage"
+        ).style.display = "none";
+
+        document.getElementById(
+            "adminPage"
+        ).style.display = "block";
+
+    }
+
+    else {
+
+        document.getElementById(
+            "loginPage"
+        ).style.display = "flex";
+
+        document.getElementById(
+            "adminPage"
+        ).style.display = "none";
+
+    }
+
+}
+
+
+/* ==================================================
+   LOGOUT
+================================================== */
+
+function adminLogout() {
+
+    sessionStorage.removeItem(
+        "adminLoggedIn"
+    );
+
+    location.reload();
+
+}
+
+
+/* ==================================================
+   DISPLAY ALL RIDES
+================================================== */
+
+function loadRides() {
+
+    const grid =
+        document.getElementById(
+            "adminRideGrid"
+        );
+
+
+    grid.innerHTML = "";
+
+
+    if (
+        !window.parkData ||
+        !Array.isArray(window.parkData.rides)
+    ) {
+
+        grid.innerHTML =
+            "<p>❌ Ride data not available.</p>";
+
+        return;
+
+    }
+
+
+    window.parkData.rides.forEach(
+        function(ride) {
+
+
+            const saved =
+                JSON.parse(
+                    localStorage.getItem(
+                        "ride_" + ride.id
+                    )
+                );
+
+
+            const people =
+                saved
+                    ? saved.people
+                    : 0;
+
+
+            const wait =
+                saved
+                    ? saved.wait
+                    : ride.wait;
+
+
+            const crowd =
+                saved
+                    ? saved.crowd
+                    : ride.crowd;
+
+
+            const card =
+                document.createElement(
+                    "div"
+                );
+
+
+            card.className =
+                "crowd-card";
+
+
+            card.style.display =
+                "block";
+
+
+            card.innerHTML = `
+
+                <div style="
+                    display:flex;
+                    align-items:center;
+                    gap:15px;
+                    margin-bottom:18px;
+                ">
+
+                    <div class="crowd-icon">
+                        ${ride.icon}
+                    </div>
+
+                    <div class="crowd-info">
+
+                        <h2>
+                            ${ride.name}
+                        </h2>
+
+                        <p>
+                            ${ride.type} Ride
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <label style="
+                    display:block;
+                    margin-bottom:8px;
+                    font-weight:bold;
+                ">
+                    👥 Current People
+                </label>
+
+
+                <input
+                    type="number"
+                    id="people_${ride.id}"
+                    value="${people}"
+                    min="0"
+                    style="
+                        width:100%;
+                        padding:12px;
+                        box-sizing:border-box;
+                        border:2px solid #eee;
+                        border-radius:10px;
+                        margin-bottom:15px;
+                    "
+                >
+
+
+                <label style="
+                    display:block;
+                    margin-bottom:8px;
+                    font-weight:bold;
+                ">
+                    ⏱️ Wait Time (minutes)
+                </label>
+
+
+                <input
+                    type="number"
+                    id="wait_${ride.id}"
+                    value="${wait}"
+                    min="0"
+                    style="
+                        width:100%;
+                        padding:12px;
+                        box-sizing:border-box;
+                        border:2px solid #eee;
+                        border-radius:10px;
+                        margin-bottom:15px;
+                    "
+                >
+
+
+                <label style="
+                    display:block;
+                    margin-bottom:8px;
+                    font-weight:bold;
+                ">
+                    👥 Crowd Status
+                </label>
+
+
+                <select
+                    id="crowd_${ride.id}"
+                    style="
+                        width:100%;
+                        padding:12px;
+                        border:2px solid #eee;
+                        border-radius:10px;
+                        margin-bottom:15px;
+                    "
+                >
+
+                    <option
+                        value="Low"
+                        ${crowd === "Low"
+                            ? "selected"
+                            : ""}
+                    >
+                        🟢 Low
+                    </option>
+
+                    <option
+                        value="Medium"
+                        ${crowd === "Medium"
+                            ? "selected"
+                            : ""}
+                    >
+                        🟡 Medium
+                    </option>
+
+                    <option
+                        value="High"
+                        ${crowd === "High"
+                            ? "selected"
+                            : ""}
+                    >
+                        🔴 High
+                    </option>
+
+                </select>
+
+
+                <button
+                    onclick="updateRide('${ride.id}')"
+                    style="
+                        width:100%;
+                        padding:13px;
+                        border:none;
+                        border-radius:10px;
+                        background:linear-gradient(
+                            135deg,
+                            #542078,
+                            #d62d75
+                        );
+                        color:white;
+                        font-weight:bold;
+                        cursor:pointer;
+                    "
+                >
+                    💾 Update ${ride.name}
+                </button>
+
+            `;
+
+
+            grid.appendChild(card);
+
+        }
+    );
+
+}
+
+
+/* ==================================================
    UPDATE RIDE
-================================ */
+================================================== */
 
 function updateRide(id) {
 
@@ -366,14 +753,16 @@ function updateRide(id) {
     );
 
 
-    alert("✅ Ride updated successfully!");
+    alert(
+        "✅ Ride updated successfully!"
+    );
 
 }
 
 
-/* ================================
+/* ==================================================
    TICKET UPDATE
-================================ */
+================================================== */
 
 function updateTickets() {
 
@@ -472,9 +861,9 @@ function updateTickets() {
 }
 
 
-/* ================================
+/* ==================================================
    LOAD SAVED TICKETS
-================================ */
+================================================== */
 
 function loadTicketData() {
 
@@ -545,9 +934,11 @@ function loadTicketData() {
 }
 
 
-loadRides();
+/* ==================================================
+   START
+================================================== */
 
-loadTicketData();
+checkAdminLogin();
 
 </script>
 
