@@ -89,6 +89,7 @@
 <script src="park-data.js"></script>
 
 <script>
+<script>
 
 function loadCrowd() {
 
@@ -102,39 +103,62 @@ function loadCrowd() {
     let medium = 0;
     let high = 0;
 
+
     rides.forEach(function(ride) {
 
-        if (ride.crowd === "Low") {
+        /* Get Admin updated data */
+
+        const saved =
+            JSON.parse(
+                localStorage.getItem("ride_" + ride.id)
+            );
+
+
+        const wait =
+            saved ? saved.wait : ride.wait;
+
+        const crowd =
+            saved ? saved.crowd : ride.crowd;
+
+
+        /* Count crowd */
+
+        if (crowd === "Low") {
             low++;
         }
 
-        else if (ride.crowd === "Medium") {
+        else if (crowd === "Medium") {
             medium++;
         }
 
-        else if (ride.crowd === "High") {
+        else if (crowd === "High") {
             high++;
         }
 
 
-        const card = document.createElement("div");
-
-        card.className = "crowd-card";
-
+        /* Crowd colour */
 
         let statusClass = "";
 
-        if (ride.crowd === "Low") {
+        if (crowd === "Low") {
             statusClass = "low";
         }
 
-        else if (ride.crowd === "Medium") {
+        else if (crowd === "Medium") {
             statusClass = "medium";
         }
 
         else {
             statusClass = "high";
         }
+
+
+        /* Create ride card */
+
+        const card =
+            document.createElement("div");
+
+        card.className = "crowd-card";
 
 
         card.innerHTML = `
@@ -150,13 +174,13 @@ function loadCrowd() {
                 <p>${ride.type} Ride</p>
 
                 <div class="wait-time">
-                    ⏱️ ${ride.wait} min wait
+                    ⏱️ ${wait} min wait
                 </div>
 
             </div>
 
             <div class="crowd-status ${statusClass}">
-                ${ride.crowd}
+                ${crowd}
             </div>
 
         `;
@@ -167,14 +191,22 @@ function loadCrowd() {
     });
 
 
-    document.getElementById("totalRides").textContent = rides.length;
+    /* Summary */
 
-    document.getElementById("lowCount").textContent = low;
+    document.getElementById("totalRides").textContent =
+        rides.length;
 
-    document.getElementById("mediumCount").textContent = medium;
+    document.getElementById("lowCount").textContent =
+        low;
 
-    document.getElementById("highCount").textContent = high;
+    document.getElementById("mediumCount").textContent =
+        medium;
 
+    document.getElementById("highCount").textContent =
+        high;
+
+
+    /* Overall message */
 
     if (low > medium && low > high) {
 
@@ -200,7 +232,11 @@ function loadCrowd() {
 }
 
 
+/* Load when page opens */
+
 loadCrowd();
+
+</script>
 
 </script>
 
