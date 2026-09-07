@@ -15,7 +15,9 @@
 
 <nav class="navbar">
 
-    <div class="logo">🎢 SmartPark Admin</div>
+    <div class="logo">
+        🎢 <span>Smart</span>Park Admin
+    </div>
 
     <div class="nav-links">
         <a href="index.html">Home</a>
@@ -33,7 +35,7 @@
 
         <h1>👨‍💼 Admin Dashboard</h1>
 
-        <span>Update park crowd information</span>
+        <span>Manage all ride crowd information</span>
 
     </div>
 
@@ -42,7 +44,7 @@
 
     <div class="crowd-message">
 
-        🎟️ Today's Tickets
+        🎟️ Total Tickets Taken Today
 
         <br><br>
 
@@ -51,30 +53,34 @@
             id="ticketCount"
             value="0"
             min="0"
-            style="padding:12px;
-                   border-radius:10px;
-                   border:2px solid #eee;
-                   width:150px;
-                   font-size:18px;
-                   text-align:center;"
+            style="
+                padding:12px;
+                border-radius:10px;
+                border:2px solid #eee;
+                width:150px;
+                font-size:18px;
+                text-align:center;
+            "
         >
 
         <button onclick="updateTickets()"
-                style="padding:12px 20px;
-                       margin-left:10px;
-                       border:none;
-                       border-radius:10px;
-                       background:#542078;
-                       color:white;
-                       font-weight:bold;
-                       cursor:pointer;">
+                style="
+                    padding:12px 20px;
+                    margin-left:10px;
+                    border:none;
+                    border-radius:10px;
+                    background:#542078;
+                    color:white;
+                    font-weight:bold;
+                    cursor:pointer;
+                ">
             Update
         </button>
 
     </div>
 
 
-    <!-- SUMMARY -->
+    <!-- PARK SUMMARY -->
 
     <div class="crowd-summary">
 
@@ -96,11 +102,25 @@
     </div>
 
 
-    <!-- MESSAGE -->
-
     <div class="crowd-message" id="adminMessage">
-        📢 Update the ticket count to see the crowd message.
+        📢 Update ticket count to see the crowd message.
     </div>
+
+
+    <!-- RIDES -->
+
+    <div class="crowd-header" style="margin-top:40px;">
+
+        <p>RIDE MANAGEMENT</p>
+
+        <h1 style="font-size:35px;">
+            🎢 Update Ride Status
+        </h1>
+
+    </div>
+
+
+    <div class="crowd-grid" id="adminRideGrid"></div>
 
 
     <button class="crowd-back"
@@ -111,17 +131,267 @@
 </div>
 
 
+<script src="park-data.js"></script>
+
 <script>
+
+
+/* ================================
+   DISPLAY ALL RIDES
+================================ */
+
+function loadRides() {
+
+    const grid =
+        document.getElementById("adminRideGrid");
+
+    grid.innerHTML = "";
+
+
+    parkData.rides.forEach(function(ride, index) {
+
+        const saved =
+            JSON.parse(
+                localStorage.getItem("ride_" + ride.id)
+            );
+
+
+        const people =
+            saved ? saved.people : 0;
+
+        const wait =
+            saved ? saved.wait : ride.wait;
+
+        const crowd =
+            saved ? saved.crowd : ride.crowd;
+
+
+        const card =
+            document.createElement("div");
+
+        card.className = "crowd-card";
+
+
+        card.style.display = "block";
+
+
+        card.innerHTML = `
+
+            <div style="
+                display:flex;
+                align-items:center;
+                gap:15px;
+                margin-bottom:18px;
+            ">
+
+                <div class="crowd-icon">
+                    ${ride.icon}
+                </div>
+
+                <div class="crowd-info">
+
+                    <h2>
+                        ${ride.name}
+                    </h2>
+
+                    <p>
+                        ${ride.type} Ride
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <label style="
+                display:block;
+                margin-bottom:8px;
+                font-weight:bold;
+            ">
+                👥 Current People
+            </label>
+
+
+            <input
+                type="number"
+                id="people_${ride.id}"
+                value="${people}"
+                min="0"
+                style="
+                    width:100%;
+                    padding:12px;
+                    box-sizing:border-box;
+                    border:2px solid #eee;
+                    border-radius:10px;
+                    margin-bottom:15px;
+                "
+            >
+
+
+            <label style="
+                display:block;
+                margin-bottom:8px;
+                font-weight:bold;
+            ">
+                ⏱️ Wait Time (minutes)
+            </label>
+
+
+            <input
+                type="number"
+                id="wait_${ride.id}"
+                value="${wait}"
+                min="0"
+                style="
+                    width:100%;
+                    padding:12px;
+                    box-sizing:border-box;
+                    border:2px solid #eee;
+                    border-radius:10px;
+                    margin-bottom:15px;
+                "
+            >
+
+
+            <label style="
+                display:block;
+                margin-bottom:8px;
+                font-weight:bold;
+            ">
+                👥 Crowd Status
+            </label>
+
+
+            <select
+                id="crowd_${ride.id}"
+                style="
+                    width:100%;
+                    padding:12px;
+                    border:2px solid #eee;
+                    border-radius:10px;
+                    margin-bottom:15px;
+                "
+            >
+
+                <option value="Low"
+                    ${crowd === "Low" ? "selected" : ""}>
+                    🟢 Low
+                </option>
+
+                <option value="Medium"
+                    ${crowd === "Medium" ? "selected" : ""}>
+                    🟡 Medium
+                </option>
+
+                <option value="High"
+                    ${crowd === "High" ? "selected" : ""}>
+                    🔴 High
+                </option>
+
+            </select>
+
+
+            <button
+                onclick="updateRide('${ride.id}')"
+                style="
+                    width:100%;
+                    padding:13px;
+                    border:none;
+                    border-radius:10px;
+                    background:linear-gradient(
+                        135deg,
+                        #542078,
+                        #d62d75
+                    );
+                    color:white;
+                    font-weight:bold;
+                    cursor:pointer;
+                "
+            >
+                💾 Update ${ride.name}
+            </button>
+
+        `;
+
+
+        grid.appendChild(card);
+
+    });
+
+}
+
+
+/* ================================
+   UPDATE RIDE
+================================ */
+
+function updateRide(id) {
+
+    const people =
+        Number(
+            document.getElementById(
+                "people_" + id
+            ).value
+        );
+
+
+    const wait =
+        Number(
+            document.getElementById(
+                "wait_" + id
+            ).value
+        );
+
+
+    const crowd =
+        document.getElementById(
+            "crowd_" + id
+        ).value;
+
+
+    const rideData = {
+
+        people: people,
+
+        wait: wait,
+
+        crowd: crowd
+
+    };
+
+
+    localStorage.setItem(
+        "ride_" + id,
+        JSON.stringify(rideData)
+    );
+
+
+    alert("✅ Ride updated successfully!");
+
+}
+
+
+/* ================================
+   TICKET UPDATE
+================================ */
 
 function updateTickets() {
 
     const count =
-        Number(document.getElementById("ticketCount").value);
+        Number(
+            document.getElementById(
+                "ticketCount"
+            ).value
+        );
 
-    document.getElementById("tickets").textContent = count;
+
+    document.getElementById(
+        "tickets"
+    ).textContent = count;
 
 
     let level = "Low";
+
     let message = "";
 
 
@@ -153,81 +423,131 @@ function updateTickets() {
     }
 
 
-    document.getElementById("crowdLevel").textContent = level;
+    document.getElementById(
+        "crowdLevel"
+    ).textContent = level;
 
-    document.getElementById("adminMessage").textContent = message;
+
+    document.getElementById(
+        "adminMessage"
+    ).textContent = message;
 
 
-    const now = new Date();
+    const now =
+        new Date();
 
-    document.getElementById("lastUpdated").textContent =
+
+    const time =
         now.toLocaleTimeString();
 
 
-    localStorage.setItem("ticketCount", count);
-
-    localStorage.setItem("crowdLevel", level);
-
-    localStorage.setItem("lastUpdated", now.toLocaleTimeString());
-
-    localStorage.setItem("crowdMessage", message);
-
-}
+    document.getElementById(
+        "lastUpdated"
+    ).textContent = time;
 
 
-function loadData() {
-
-    const savedTickets =
-        localStorage.getItem("ticketCount");
-
-    const savedLevel =
-        localStorage.getItem("crowdLevel");
-
-    const savedTime =
-        localStorage.getItem("lastUpdated");
-
-    const savedMessage =
-        localStorage.getItem("crowdMessage");
+    localStorage.setItem(
+        "ticketCount",
+        count
+    );
 
 
-    if (savedTickets !== null) {
-
-        document.getElementById("ticketCount").value =
-            savedTickets;
-
-        document.getElementById("tickets").textContent =
-            savedTickets;
-
-    }
+    localStorage.setItem(
+        "crowdLevel",
+        level
+    );
 
 
-    if (savedLevel !== null) {
-
-        document.getElementById("crowdLevel").textContent =
-            savedLevel;
-
-    }
+    localStorage.setItem(
+        "lastUpdated",
+        time
+    );
 
 
-    if (savedTime !== null) {
-
-        document.getElementById("lastUpdated").textContent =
-            savedTime;
-
-    }
-
-
-    if (savedMessage !== null) {
-
-        document.getElementById("adminMessage").textContent =
-            savedMessage;
-
-    }
+    localStorage.setItem(
+        "crowdMessage",
+        message
+    );
 
 }
 
 
-loadData();
+/* ================================
+   LOAD SAVED TICKETS
+================================ */
+
+function loadTicketData() {
+
+    const tickets =
+        localStorage.getItem(
+            "ticketCount"
+        );
+
+
+    const level =
+        localStorage.getItem(
+            "crowdLevel"
+        );
+
+
+    const time =
+        localStorage.getItem(
+            "lastUpdated"
+        );
+
+
+    const message =
+        localStorage.getItem(
+            "crowdMessage"
+        );
+
+
+    if (tickets !== null) {
+
+        document.getElementById(
+            "ticketCount"
+        ).value = tickets;
+
+
+        document.getElementById(
+            "tickets"
+        ).textContent = tickets;
+
+    }
+
+
+    if (level !== null) {
+
+        document.getElementById(
+            "crowdLevel"
+        ).textContent = level;
+
+    }
+
+
+    if (time !== null) {
+
+        document.getElementById(
+            "lastUpdated"
+        ).textContent = time;
+
+    }
+
+
+    if (message !== null) {
+
+        document.getElementById(
+            "adminMessage"
+        ).textContent = message;
+
+    }
+
+}
+
+
+loadRides();
+
+loadTicketData();
 
 </script>
 
