@@ -16,7 +16,7 @@
 <div class="route-container">
 
     <!-- HEADER -->
-    <div class="route-header">
+    <div class="route-header route-animate route-header-animate">
 
         <p>🎢 SMARTPARK</p>
 
@@ -30,7 +30,7 @@
 
 
     <!-- SMART RECOMMENDATION -->
-    <div style="
+    <div class="smart-panel smart-panel-1" style="
         max-width:900px;
         margin:0 auto 25px;
         padding:25px;
@@ -62,7 +62,7 @@
 
 
     <!-- TIME BUDGET -->
-    <div style="
+    <div class="smart-panel smart-panel-2" style="
         max-width:900px;
         margin:0 auto 25px;
         padding:25px;
@@ -94,7 +94,7 @@
 
 
     <!-- LIVE CROWD -->
-    <div style="
+    <div class="smart-panel smart-panel-3" style="
         max-width:900px;
         margin:0 auto 25px;
         padding:25px;
@@ -165,7 +165,7 @@
 
 
 <!-- PARK DATA -->
-<script src="park-data.js"></script>
+<script src="park-data.js?v=20"></script>
 
 
 <script>
@@ -620,6 +620,8 @@ document.addEventListener("DOMContentLoaded", function () {
         const card =
             document.createElement("div");
 
+
+        card.className = "crowd-animate-card";
 
         card.style.cssText = `
             display:flex;
