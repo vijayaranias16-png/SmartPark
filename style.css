@@ -996,3 +996,169 @@ footer p {
     }
 
 }
+
+/* =========================================
+   SMARTPARK THEME-PARK ANIMATIONS
+   Added without removing existing CSS
+   ========================================= */
+
+/* Smart Route page entrance */
+.route-header-animate {
+    animation: parkHeaderIn 0.9s ease-out both;
+}
+
+.smart-panel {
+    opacity: 0;
+    animation: parkPanelIn 0.7s ease-out forwards;
+}
+
+.smart-panel-1 {
+    animation-delay: 0.15s;
+}
+
+.smart-panel-2 {
+    animation-delay: 0.30s;
+}
+
+.smart-panel-3 {
+    animation-delay: 0.45s;
+}
+
+.route-summary {
+    animation: parkPanelIn 0.7s ease-out 0.55s both;
+}
+
+/* Ride cards enter one after another */
+.route-ride-animate {
+    animation: rideCardIn 0.65s ease-out both;
+}
+
+.route-ride-animate:nth-child(1) {
+    animation-delay: 0.10s;
+}
+
+.route-ride-animate:nth-child(3) {
+    animation-delay: 0.25s;
+}
+
+.route-ride-animate:nth-child(5) {
+    animation-delay: 0.40s;
+}
+
+.route-ride-animate:nth-child(7) {
+    animation-delay: 0.55s;
+}
+
+.route-ride-animate:nth-child(9) {
+    animation-delay: 0.70s;
+}
+
+.route-ride-animate:nth-child(11) {
+    animation-delay: 0.85s;
+}
+
+.route-ride-animate:nth-child(13) {
+    animation-delay: 1.00s;
+}
+
+.route-ride-animate:nth-child(15) {
+    animation-delay: 1.15s;
+}
+
+/* Live crowd cards */
+.crowd-animate-card {
+    animation: crowdCardIn 0.55s ease-out both;
+}
+
+/* Small interactive movement */
+.route-card:hover {
+    transform: translateY(-7px) scale(1.01);
+    transition: transform 0.25s ease;
+}
+
+.route-number {
+    animation: numberPop 0.6s ease-out;
+}
+
+.back-btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 10px 25px #0003;
+    transition: 0.25s ease;
+}
+
+/* Animation keyframes */
+@keyframes parkHeaderIn {
+    from {
+        opacity: 0;
+        transform: translateY(-30px) scale(0.97);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+@keyframes parkPanelIn {
+    from {
+        opacity: 0;
+        transform: translateY(35px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes rideCardIn {
+    from {
+        opacity: 0;
+        transform: translateX(-45px) rotate(-1deg);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateX(0) rotate(0);
+    }
+}
+
+@keyframes crowdCardIn {
+    from {
+        opacity: 0;
+        transform: translateX(30px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+@keyframes numberPop {
+    0% {
+        transform: scale(0.5) rotate(-15deg);
+    }
+
+    70% {
+        transform: scale(1.12) rotate(4deg);
+    }
+
+    100% {
+        transform: scale(1) rotate(0);
+    }
+}
+
+/* Respect users who prefer reduced motion */
+@media (prefers-reduced-motion: reduce) {
+    .route-header-animate,
+    .smart-panel,
+    .route-summary,
+    .route-ride-animate,
+    .crowd-animate-card,
+    .route-number {
+        animation: none !important;
+        opacity: 1 !important;
+        transform: none !important;
+    }
+}
