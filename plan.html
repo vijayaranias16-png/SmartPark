@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -17,62 +18,71 @@
 
         <div class="plan-card">
 
+            <!-- RIDES -->
             <h2>🎯 What do you want to enjoy?</h2>
 
             <label>
-                <input type="checkbox" value="Thrill">
+                <input type="checkbox" name="rideType" value="Thrill">
                 🎢 Thrill Rides
             </label>
 
             <label>
-                <input type="checkbox" value="Water">
+                <input type="checkbox" name="rideType" value="Water">
                 🌊 Water Rides
             </label>
 
             <label>
-                <input type="checkbox" value="Family">
+                <input type="checkbox" name="rideType" value="Family">
                 👨‍👩‍👧 Family Rides
             </label>
 
             <label>
-                <input type="checkbox" value="Kids">
+                <input type="checkbox" name="rideType" value="Kids">
                 🧒 Kids Zone
             </label>
 
+
+            <!-- PLACES -->
             <h2>📍 Places to Visit</h2>
 
             <label>
-                <input type="checkbox" value="Food">
+                <input type="checkbox" name="placeType" value="Food">
                 🍔 Food
             </label>
 
             <label>
-                <input type="checkbox" value="Restroom">
+                <input type="checkbox" name="placeType" value="Restroom">
                 🚻 Restroom
             </label>
 
             <label>
-                <input type="checkbox" value="Locker">
+                <input type="checkbox" name="placeType" value="Locker">
                 🔐 Locker
             </label>
 
+
+            <!-- TIME -->
             <h2>⏰ How much time do you have?</h2>
 
-            <select>
-                <option>2 Hours</option>
-                <option>4 Hours</option>
-                <option>6 Hours</option>
-                <option>Full Day</option>
+            <select id="timeSelect">
+                <option value="2 Hours">2 Hours</option>
+                <option value="4 Hours">4 Hours</option>
+                <option value="6 Hours">6 Hours</option>
+                <option value="Full Day">Full Day</option>
             </select>
 
+
+            <!-- WALKING -->
             <h2>🚶 Walking Preference</h2>
 
-            <select>
-                <option>Less Walking</option>
-                <option>Normal Walking</option>
-                <option>I Don't Mind Walking</option>
+            <select id="walkingSelect">
+                <option value="Less Walking">Less Walking</option>
+                <option value="Normal Walking">Normal Walking</option>
+                <option value="I Don't Mind Walking">I Don't Mind Walking</option>
             </select>
 
+
+            <!-- BUTTON -->
             <button onclick="generateRoute()">
                 🚀 Generate Smart Route
             </button>
@@ -81,26 +91,89 @@
 
     </div>
 
+
 <script>
-    function generateRoute() {
 
-        const selectedRides = [];
+function generateRoute() {
 
-        document.querySelectorAll('input[type="checkbox"]:checked').forEach(function(item) {
-            selectedRides.push(item.value);
-        });
+    /* ==============================
+       GET SELECTED RIDES ONLY
+    ============================== */
 
-        const selects = document.querySelectorAll('select');
+    const selectedRides = [];
 
-        const time = selects[0].value;
-        const walking = selects[1].value;
+    document.querySelectorAll(
+        'input[name="rideType"]:checked'
+    ).forEach(function(item) {
 
-        localStorage.setItem("selectedRides", JSON.stringify(selectedRides));
-        localStorage.setItem("selectedTime", time);
-        localStorage.setItem("walkingPreference", walking);
+        selectedRides.push(item.value);
 
-        window.location.href = "smart-route.html";
-    }
+    });
+
+
+    /* ==============================
+       GET SELECTED PLACES ONLY
+    ============================== */
+
+    const selectedPlaces = [];
+
+    document.querySelectorAll(
+        'input[name="placeType"]:checked'
+    ).forEach(function(item) {
+
+        selectedPlaces.push(item.value);
+
+    });
+
+
+    /* ==============================
+       GET TIME
+    ============================== */
+
+    const time =
+        document.getElementById("timeSelect").value;
+
+
+    /* ==============================
+       GET WALKING PREFERENCE
+    ============================== */
+
+    const walking =
+        document.getElementById("walkingSelect").value;
+
+
+    /* ==============================
+       SAVE CURRENT SELECTION
+    ============================== */
+
+    localStorage.setItem(
+        "selectedRides",
+        JSON.stringify(selectedRides)
+    );
+
+    localStorage.setItem(
+        "selectedPlaces",
+        JSON.stringify(selectedPlaces)
+    );
+
+    localStorage.setItem(
+        "selectedTime",
+        time
+    );
+
+    localStorage.setItem(
+        "walkingPreference",
+        walking
+    );
+
+
+    /* ==============================
+       GO TO SMART ROUTE
+    ============================== */
+
+    window.location.href = "smart-route.html";
+}
+
 </script>
 
 </body>
