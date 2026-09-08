@@ -1,0 +1,986 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>SmartPark Booking</title>
+
+    <link rel="stylesheet"
+        href="https://vijayaranias16-png.github.io/SmartPark/style.css?v=20">
+
+    <style>
+        .booking-page {
+            min-height: 100vh;
+            padding: 30px 20px;
+        }
+
+        .booking-header {
+            text-align: center;
+            margin-bottom: 25px;
+        }
+
+        .booking-card,
+        .my-booking {
+            max-width: 700px;
+            margin: 0 auto 25px;
+            background: white;
+            padding: 25px;
+            border-radius: 18px;
+            box-shadow: 0 5px 20px rgba(0,0,0,.12);
+        }
+
+        select {
+            width: 100%;
+            padding: 13px;
+            border-radius: 10px;
+            border: 1px solid #ccc;
+            margin: 10px 0 18px;
+            font-size: 16px;
+        }
+
+        .ride-status {
+            padding: 15px;
+            border-radius: 12px;
+            background: #f5f5f5;
+            margin-bottom: 15px;
+            display: none;
+        }
+
+        .ride-status.show {
+            display: block;
+        }
+
+        .join-btn {
+            width: 100%;
+            padding: 14px;
+            border: none;
+            border-radius: 12px;
+            background: #222;
+            color: white;
+            font-size: 17px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .booking-result {
+            display: none;
+            margin-top: 20px;
+            padding: 20px;
+            border-radius: 15px;
+            background: #f1f8f3;
+            text-align: center;
+        }
+
+        .booking-result.show {
+            display: block;
+        }
+
+        .queue-number {
+            font-size: 35px;
+            font-weight: bold;
+            margin: 10px 0;
+        }
+
+        .cancel-btn {
+            margin-top: 15px;
+            padding: 10px 18px;
+            border: none;
+            border-radius: 10px;
+            background: #d9534f;
+            color: white;
+            cursor: pointer;
+        }
+
+        .booking-item {
+            padding: 18px;
+            border-radius: 15px;
+            background: #f7f7f7;
+        }
+
+        .low {
+            color: green;
+            font-weight: bold;
+        }
+
+        .medium {
+            color: #b07800;
+            font-weight: bold;
+        }
+
+        .high {
+            color: red;
+            font-weight: bold;
+        }
+
+        .back-home {
+            display: block;
+            width: fit-content;
+            margin: 25px auto;
+            padding: 12px 22px;
+            background: #222;
+            color: white;
+            text-decoration: none;
+            border-radius: 12px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="booking-page">
+
+    <div class="booking-header">
+
+        <h1>🎟️ SmartPark Virtual Booking</h1>
+
+        <p>
+            Join the virtual queue and enjoy the park without standing in line.
+        </p>
+
+    </div>
+
+
+    <div class="booking-card">
+
+        <h2>🎢 Select Your Ride</h2>
+
+        <select id="rideSelect"
+                onchange="showRideStatus()">
+
+            <option value="">
+                -- Select a Ride --
+            </option>
+
+        </select>
+
+
+        <div id="rideStatus"
+             class="ride-status">
+
+            <strong id="statusRide"></strong>
+
+            <p>
+                ⏱️ Current Wait:
+                <strong id="statusWait"></strong>
+            </p>
+
+            <p>
+                👥 Current Crowd:
+                <strong id="statusCrowd"></strong>
+            </p>
+
+            <small>
+                🔄 Updated from Admin Dashboard
+            </small>
+
+        </div>
+
+
+        <button class="join-btn"
+                onclick="joinQueue()">
+
+            🎟️ Join Virtual Queue
+
+        </button>
+
+
+        <div id="bookingResult"
+             class="booking-result">
+
+            <h2>✅ Queue Joined!</h2>
+
+            <p id="bookedRide"></p>
+
+            <div class="queue-number"
+                 id="queueNumber">
+                A00
+            </div>
+
+            <p>
+                Your Queue Number
+            </p>
+
+            <p>
+                ⏱️ Current Wait:
+                <strong id="estimatedTime"></strong>
+            </p>
+
+            <p>
+                👥 Crowd:
+                <strong id="bookedCrowd"></strong>
+            </p>
+
+            <p>
+                🔔 Status:
+                <strong>Waiting</strong>
+            </p>
+
+            <button class="cancel-btn"
+                    onclick="cancelQueue()">
+
+                ❌ Cancel Queue
+
+            </button>
+
+        </div>
+
+    </div>
+
+
+    <div class="my-booking">
+
+        <h2>📋 My Booking</h2>
+
+        <div id="myBooking">
+            No active booking.
+        </div>
+
+    </div>
+
+
+    <a href="index.html"
+       class="back-home">
+
+        ← Back to Home
+
+    </a>
+
+</div>
+
+
+<script>
+
+/* ==========================================
+   RIDE DATA
+========================================== */
+
+const rides = [
+
+    {id:1,name:"Vaigai Vortex",wait:10,crowd:"Low"},
+    {id:2,name:"Chola Coaster",wait:18,crowd:"Medium"},
+    {id:3,name:"Madurai Thunder",wait:22,crowd:"High"},
+    {id:4,name:"Marina Rush",wait:15,crowd:"Medium"},
+    {id:5,name:"Kaveri Cyclone",wait:25,crowd:"High"},
+    {id:6,name:"Tamilan Twist",wait:12,crowd:"Low"},
+
+    {id:7,name:"Vaigai Rapids",wait:25,crowd:"High"},
+    {id:8,name:"Kaveri Splash",wait:20,crowd:"Medium"},
+    {id:9,name:"Marina Wave",wait:30,crowd:"High"},
+    {id:10,name:"Cauvery Falls",wait:14,crowd:"Low"},
+    {id:11,name:"Tamil Nadu Aqua Ride",wait:18,crowd:"Medium"},
+
+    {id:12,name:"Meenakshi Carousel",wait:8,crowd:"Low"},
+    {id:13,name:"Temple Town Train",wait:12,crowd:"Low"},
+    {id:14,name:"Kovil Oorla Ride",wait:16,crowd:"Medium"},
+    {id:15,name:"Jasmine Wheel",wait:10,crowd:"Low"},
+    {id:16,name:"Pongal Express",wait:15,crowd:"Medium"},
+
+    {id:17,name:"Kutty Chutti Ride",wait:7,crowd:"Low"},
+    {id:18,name:"Little Tamilan Flyers",wait:9,crowd:"Low"},
+    {id:19,name:"Chinna Chinna Cars",wait:11,crowd:"Medium"},
+    {id:20,name:"Butterfly Garden Ride",wait:6,crowd:"Low"}
+
+];
+
+
+/* ==========================================
+   LOAD RIDES
+========================================== */
+
+function loadRides() {
+
+    const select =
+        document.getElementById("rideSelect");
+
+    rides.forEach(ride => {
+
+        const option =
+            document.createElement("option");
+
+        option.value = ride.id;
+
+        option.textContent =
+            "🎢 " + ride.name;
+
+        select.appendChild(option);
+
+    });
+
+}
+
+
+/* ==========================================
+   GET ADMIN DATA
+========================================== */
+
+function getRideData(ride) {
+
+    const saved =
+        localStorage.getItem(
+            "ride_" + ride.id
+        );
+
+    if (saved) {
+
+        try {
+
+            const data =
+                JSON.parse(saved);
+
+            return {
+
+                ...ride,
+
+                wait:
+                    data.wait !== undefined
+                        ? Number(data.wait)
+                        : ride.wait,
+
+                crowd:
+                    data.crowd ||
+                    ride.crowd
+
+            };
+
+        } catch (error) {
+
+            return ride;
+
+        }
+
+    }
+
+    return ride;
+
+}
+
+
+/* ==========================================
+   GET CROWD COUNT
+========================================== */
+
+function getCrowdCount(rideId) {
+
+    const saved =
+        localStorage.getItem(
+            "ride_" + rideId
+        );
+
+    if (!saved) {
+        return 0;
+    }
+
+    try {
+
+        const data =
+            JSON.parse(saved);
+
+        return Number(
+            data.people || 0
+        );
+
+    } catch (error) {
+
+        return 0;
+
+    }
+
+}
+
+
+/* ==========================================
+   UPDATE RIDE AFTER BOOKING
+========================================== */
+
+function updateRideCrowd(ride) {
+
+    const current =
+        localStorage.getItem(
+            "ride_" + ride.id
+        );
+
+    let data = {};
+
+    if (current) {
+
+        try {
+            data = JSON.parse(current);
+        } catch (error) {
+            data = {};
+        }
+
+    }
+
+
+    /* +1 PERSON */
+
+    const oldPeople =
+        Number(data.people || 0);
+
+    const newPeople =
+        oldPeople + 1;
+
+
+    /*
+       WAIT TIME ALSO INCREASES
+       SLIGHTLY FOR DEMO
+    */
+
+    const oldWait =
+        data.wait !== undefined
+            ? Number(data.wait)
+            : ride.wait;
+
+    const newWait =
+        oldWait + 1;
+
+
+    /* CROWD CALCULATION */
+
+    let newCrowd = "Low";
+
+    if (newPeople >= 100) {
+
+        newCrowd = "High";
+
+    } else if (newPeople >= 50) {
+
+        newCrowd = "Medium";
+
+    }
+
+
+    /* SAVE */
+
+    localStorage.setItem(
+        "ride_" + ride.id,
+        JSON.stringify({
+
+            people: newPeople,
+
+            wait: newWait,
+
+            crowd: newCrowd
+
+        })
+    );
+
+
+    return {
+
+        ...ride,
+
+        people: newPeople,
+
+        wait: newWait,
+
+        crowd: newCrowd
+
+    };
+
+}
+
+
+/* ==========================================
+   SHOW RIDE STATUS
+========================================== */
+
+function showRideStatus() {
+
+    const select =
+        document.getElementById(
+            "rideSelect"
+        );
+
+    const id =
+        Number(select.value);
+
+
+    if (!id) {
+
+        document
+            .getElementById("rideStatus")
+            .classList.remove("show");
+
+        return;
+
+    }
+
+
+    const original =
+        rides.find(
+            ride => ride.id === id
+        );
+
+
+    const ride =
+        getRideData(original);
+
+
+    document.getElementById(
+        "statusRide"
+    ).innerText =
+        "🎢 " + ride.name;
+
+
+    document.getElementById(
+        "statusWait"
+    ).innerText =
+        ride.wait + " minutes";
+
+
+    document.getElementById(
+        "statusCrowd"
+    ).innerText =
+        ride.crowd;
+
+
+    document.getElementById(
+        "statusCrowd"
+    ).className =
+        ride.crowd.toLowerCase();
+
+
+    document
+        .getElementById("rideStatus")
+        .classList.add("show");
+
+}
+
+
+/* ==========================================
+   JOIN QUEUE
+========================================== */
+
+function joinQueue() {
+
+    const select =
+        document.getElementById(
+            "rideSelect"
+        );
+
+    const id =
+        Number(select.value);
+
+
+    if (!id) {
+
+        alert(
+            "Please select a ride first!"
+        );
+
+        return;
+
+    }
+
+
+    const original =
+        rides.find(
+            ride => ride.id === id
+        );
+
+
+    let ride =
+        getRideData(original);
+
+
+    /*
+       UPDATE CROWD +1
+    */
+
+    ride =
+        updateRideCrowd(ride);
+
+
+    /* QUEUE NUMBER */
+
+    const queueNumber =
+        "A" +
+        Math.floor(
+            10 +
+            Math.random() * 90
+        );
+
+
+    /* BOOKING */
+
+    const booking = {
+
+        rideId: ride.id,
+
+        ride: ride.name,
+
+        queue: queueNumber,
+
+        wait: ride.wait,
+
+        crowd: ride.crowd,
+
+        people: ride.people,
+
+        status: "Waiting",
+
+        time:
+            new Date()
+                .toLocaleTimeString()
+
+    };
+
+
+    localStorage.setItem(
+        "smartParkBooking",
+        JSON.stringify(booking)
+    );
+
+
+    /* SHOW RESULT */
+
+    document.getElementById(
+        "bookedRide"
+    ).innerText =
+        "🎢 " + ride.name;
+
+
+    document.getElementById(
+        "queueNumber"
+    ).innerText =
+        queueNumber;
+
+
+    document.getElementById(
+        "estimatedTime"
+    ).innerText =
+        ride.wait + " minutes";
+
+
+    document.getElementById(
+        "bookedCrowd"
+    ).innerText =
+        ride.crowd +
+        " (" +
+        ride.people +
+        " people)";
+
+
+    document
+        .getElementById("bookingResult")
+        .classList.add("show");
+
+
+    showBooking();
+
+
+    /*
+       UPDATE CURRENT STATUS
+    */
+
+    showRideStatus();
+
+
+    alert(
+        "🎟️ Queue Joined Successfully!\n\n" +
+        "Ride: " + ride.name +
+        "\nQueue: " + queueNumber +
+        "\nCrowd: " + ride.people +
+        " people"
+    );
+
+}
+
+
+/* ==========================================
+   SHOW MY BOOKING
+========================================== */
+
+function showBooking() {
+
+    const data =
+        localStorage.getItem(
+            "smartParkBooking"
+        );
+
+
+    const box =
+        document.getElementById(
+            "myBooking"
+        );
+
+
+    if (!data) {
+
+        box.innerHTML =
+            "No active booking.";
+
+        document
+            .getElementById("bookingResult")
+            .classList.remove("show");
+
+        return;
+
+    }
+
+
+    const booking =
+        JSON.parse(data);
+
+
+    const original =
+        rides.find(
+            ride => ride.id === booking.rideId
+        );
+
+
+    if (original) {
+
+        const latest =
+            getRideData(original);
+
+        booking.wait =
+            latest.wait;
+
+        booking.crowd =
+            latest.crowd;
+
+        booking.people =
+            getCrowdCount(
+                booking.rideId
+            );
+
+    }
+
+
+    box.innerHTML = `
+
+        <div class="booking-item">
+
+            <h3>
+                🎢 ${booking.ride}
+            </h3>
+
+            <p>
+                🎟️ Queue Number:
+                <strong>
+                    ${booking.queue}
+                </strong>
+            </p>
+
+            <p>
+                ⏱️ Current Wait:
+                <strong>
+                    ${booking.wait} minutes
+                </strong>
+            </p>
+
+            <p>
+                👥 Current Crowd:
+                <strong>
+                    ${booking.crowd}
+                </strong>
+            </p>
+
+            <p>
+                👤 People:
+                <strong>
+                    ${booking.people}
+                </strong>
+            </p>
+
+            <p>
+                🔔 Status:
+                <strong>
+                    ${booking.status}
+                </strong>
+            </p>
+
+            <small>
+                🔄 Live data from Admin Dashboard
+            </small>
+
+        </div>
+
+    `;
+
+
+    document.getElementById(
+        "bookedRide"
+    ).innerText =
+        "🎢 " + booking.ride;
+
+
+    document.getElementById(
+        "queueNumber"
+    ).innerText =
+        booking.queue;
+
+
+    document.getElementById(
+        "estimatedTime"
+    ).innerText =
+        booking.wait + " minutes";
+
+
+    document.getElementById(
+        "bookedCrowd"
+    ).innerText =
+        booking.crowd +
+        " (" +
+        booking.people +
+        " people)";
+
+
+    document
+        .getElementById("bookingResult")
+        .classList.add("show");
+
+}
+
+
+/* ==========================================
+   CANCEL QUEUE
+========================================== */
+
+function cancelQueue() {
+
+    const data =
+        localStorage.getItem(
+            "smartParkBooking"
+        );
+
+
+    if (!data) {
+        return;
+    }
+
+
+    const booking =
+        JSON.parse(data);
+
+
+    const original =
+        rides.find(
+            ride => ride.id === booking.rideId
+        );
+
+
+    /*
+       REMOVE ONE PERSON
+    */
+
+    if (original) {
+
+        const saved =
+            localStorage.getItem(
+                "ride_" + original.id
+            );
+
+
+        if (saved) {
+
+            try {
+
+                const rideData =
+                    JSON.parse(saved);
+
+
+                const people =
+                    Math.max(
+                        0,
+                        Number(
+                            rideData.people || 0
+                        ) - 1
+                    );
+
+
+                let crowd = "Low";
+
+
+                if (people >= 100) {
+
+                    crowd = "High";
+
+                } else if (people >= 50) {
+
+                    crowd = "Medium";
+
+                }
+
+
+                localStorage.setItem(
+                    "ride_" + original.id,
+                    JSON.stringify({
+
+                        people: people,
+
+                        wait:
+                            Math.max(
+                                original.wait,
+                                Number(
+                                    rideData.wait || original.wait
+                                ) - 1
+                            ),
+
+                        crowd: crowd
+
+                    })
+                );
+
+
+            } catch (error) {}
+
+        }
+
+    }
+
+
+    localStorage.removeItem(
+        "smartParkBooking"
+    );
+
+
+    document
+        .getElementById("bookingResult")
+        .classList.remove("show");
+
+
+    showBooking();
+
+
+    alert(
+        "❌ Virtual queue cancelled.\n" +
+        "Ride crowd updated."
+    );
+
+}
+
+
+/* ==========================================
+   AUTO REFRESH
+========================================== */
+
+setInterval(
+    function () {
+
+        showRideStatus();
+
+        showBooking();
+
+    },
+    3000
+);
+
+
+/* ==========================================
+   START
+========================================== */
+
+loadRides();
+
+showBooking();
+
+</script>
+
+</body>
+</html>
