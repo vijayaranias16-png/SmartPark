@@ -1,180 +1,1179 @@
-<!-- GOOGLE MAP -->
-<div class="smartpark-map">
+<!DOCTYPE html>
+<html lang="en">
 
-    <h2>🗺️ SmartPark Map</h2>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <div id="map"></div>
+    <title>All Rides - SmartPark</title>
 
-    <div id="location-info" class="location-info">
-        <h3>📍 Select a location</h3>
-        <p>Click any ride, shop or facility marker to see nearby locations.</p>
+    <link rel="stylesheet"
+        href="https://vijayaranias16-png.github.io/SmartPark/style.css?v=20">
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+        }
+
+        .rides-page {
+            min-height: 100vh;
+            padding: 30px 20px;
+        }
+
+        .rides-header {
+            text-align: center;
+            margin-bottom: 25px;
+        }
+
+        .rides-header h1 {
+            margin-bottom: 8px;
+        }
+
+        .rides-header p {
+            margin-top: 0;
+        }
+
+        /* FILTER */
+
+        .filter-box {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin: 20px auto 30px;
+        }
+
+        .filter-btn {
+            border: none;
+            padding: 10px 18px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-weight: bold;
+            background: #eeeeee;
+        }
+
+        .filter-btn:hover {
+            transform: translateY(-2px);
+        }
+
+        .filter-btn.active {
+            background: #222;
+            color: white;
+        }
+
+        /* MAP */
+
+        .map-section {
+            max-width: 1200px;
+            margin: 0 auto 35px;
+            background: white;
+            border-radius: 18px;
+            padding: 20px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.12);
+        }
+
+        .map-section h2 {
+            text-align: center;
+            margin-top: 0;
+        }
+
+        #smartparkMap {
+            width: 100%;
+            height: 600px;
+            border-radius: 15px;
+            overflow: hidden;
+        }
+
+        /* MAP DETAILS */
+
+        .map-details {
+            display: none;
+            margin-top: 20px;
+            padding: 20px;
+            border-radius: 15px;
+            background: #f7f7f7;
+        }
+
+        .map-details.show {
+            display: block;
+        }
+
+        .selected-place {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .selected-place h3 {
+            margin-bottom: 5px;
+        }
+
+        .nearby-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 15px;
+        }
+
+        .nearby-card {
+            background: white;
+            border-radius: 12px;
+            padding: 15px;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.08);
+        }
+
+        .nearby-card h4 {
+            margin: 0 0 8px;
+        }
+
+        .nearby-card p {
+            margin: 5px 0;
+            font-size: 14px;
+        }
+
+        .place-tag {
+            display: inline-block;
+            padding: 5px 10px;
+            border-radius: 15px;
+            background: #eeeeee;
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        /* RIDES */
+
+        .rides-grid {
+            max-width: 1200px;
+            margin: auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+        }
+
+        .ride-card {
+            background: white;
+            border-radius: 18px;
+            overflow: hidden;
+            box-shadow: 0 5px 18px rgba(0, 0, 0, 0.12);
+            transition: 0.25s;
+        }
+
+        .ride-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .ride-image {
+            width: 100%;
+            height: 180px;
+            object-fit: cover;
+        }
+
+        .ride-content {
+            padding: 18px;
+        }
+
+        .ride-icon {
+            font-size: 30px;
+        }
+
+        .ride-content h2 {
+            margin: 8px 0;
+        }
+
+        .ride-type {
+            font-size: 14px;
+            font-weight: bold;
+            margin-bottom: 12px;
+        }
+
+        .ride-info {
+            display: flex;
+            justify-content: space-between;
+            gap: 10px;
+        }
+
+        .ride-info span {
+            padding: 7px 10px;
+            border-radius: 10px;
+            font-size: 13px;
+            font-weight: bold;
+        }
+
+        .low {
+            background: #d9f7df;
+            color: #137333;
+        }
+
+        .medium {
+            background: #fff1c7;
+            color: #9a6700;
+        }
+
+        .high {
+            background: #ffd8d8;
+            color: #b00020;
+        }
+
+        .back-home {
+            display: block;
+            width: fit-content;
+            margin: 30px auto 0;
+            padding: 12px 22px;
+            border-radius: 12px;
+            text-decoration: none;
+            font-weight: bold;
+            background: #222;
+            color: white;
+        }
+
+        /* INFO WINDOW */
+
+        .info-window {
+            min-width: 180px;
+        }
+
+        .info-window h3 {
+            margin: 0 0 7px;
+        }
+
+        .info-window p {
+            margin: 5px 0;
+        }
+
+        /* MOBILE */
+
+        @media (max-width: 700px) {
+
+            .rides-page {
+                padding: 20px 12px;
+            }
+
+            #smartparkMap {
+                height: 450px;
+            }
+
+            .map-section {
+                padding: 12px;
+            }
+
+            .rides-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="rides-page">
+
+    <!-- HEADER -->
+
+    <div class="rides-header">
+
+        <h1>🎢 All SmartPark Rides</h1>
+
+        <p>
+            Explore all rides and find them easily on the SmartPark map.
+        </p>
+
     </div>
+
+
+    <!-- FILTER -->
+
+    <div class="filter-box">
+
+        <button class="filter-btn active"
+            onclick="showRides('All', this)">
+            🌈 All
+        </button>
+
+        <button class="filter-btn"
+            onclick="showRides('Thrill', this)">
+            🎢 Thrill
+        </button>
+
+        <button class="filter-btn"
+            onclick="showRides('Water', this)">
+            🌊 Water
+        </button>
+
+        <button class="filter-btn"
+            onclick="showRides('Family', this)">
+            👨‍👩‍👧 Family
+        </button>
+
+        <button class="filter-btn"
+            onclick="showRides('Kids', this)">
+            🧒 Kids
+        </button>
+
+    </div>
+
+
+    <!-- GOOGLE MAP -->
+
+    <div class="map-section">
+
+        <h2>🗺️ SmartPark Live Map</h2>
+
+        <div id="smartparkMap"></div>
+
+        <div id="mapDetails" class="map-details">
+
+            <div class="selected-place">
+
+                <h3 id="selectedPlaceName">
+                    Selected Location
+                </h3>
+
+                <p id="selectedPlaceType">
+                    Nearby locations
+                </p>
+
+            </div>
+
+            <div id="nearbyGrid"
+                 class="nearby-grid">
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- RIDES -->
+
+    <div id="ridesGrid"
+         class="rides-grid">
+    </div>
+
+
+    <a href="index.html"
+       class="back-home">
+        ← Back to Home
+    </a>
 
 </div>
 
-<style>
-.smartpark-map {
-    max-width: 1100px;
-    margin: 0 auto 35px;
-    padding: 15px;
-    background: white;
-    border-radius: 22px;
-    box-shadow: 0 12px 30px #0005;
-}
 
-.smartpark-map h2 {
-    text-align: center;
-    color: #17134d;
-    margin: 5px 0 15px;
-}
+<script src="park-data.js"></script>
 
-#map {
-    width: 100%;
-    height: 500px;
-    border-radius: 18px;
-}
-
-.location-info {
-    margin-top: 15px;
-    padding: 15px;
-    background: #f5f3ff;
-    border-radius: 15px;
-    color: #17134d;
-}
-
-.location-info h3 {
-    margin-top: 0;
-}
-
-.nearby-item {
-    display: inline-block;
-    padding: 8px 12px;
-    margin: 5px;
-    background: white;
-    border-radius: 10px;
-    box-shadow: 0 2px 8px #0002;
-}
-</style>
 
 <script>
 
-let map;
+/* =====================================================
+   RIDE DATA
+===================================================== */
 
-/* =====================================
-   SMARTPARK 48 LOCATIONS
-===================================== */
+const rides = [
 
-const smartParkLocations = [
+    {
+        id: 1,
+        name: "Vaigai Vortex",
+        type: "Thrill",
+        icon: "🎢",
+        image: "https://images.unsplash.com/photo-1594736797933-d0501ba2fe65?auto=format&fit=crop&w=900&q=80",
+        wait: 10,
+        crowd: "Low"
+    },
 
-    /* 20 RIDES */
+    {
+        id: 2,
+        name: "Chola Coaster",
+        type: "Thrill",
+        icon: "🎢",
+        image: "https://images.unsplash.com/photo-1513889961551-628c1e5e1ee9?auto=format&fit=crop&w=900&q=80",
+        wait: 18,
+        crowd: "Medium"
+    },
 
-    {name:"Vaigai Vortex", type:"Ride", lat:9.92580, lng:78.11920, icon:"🎢"},
-    {name:"Chola Coaster", type:"Ride", lat:9.92620, lng:78.12000, icon:"🎢"},
-    {name:"Madurai Thunder", type:"Ride", lat:9.92540, lng:78.12100, icon:"⚡"},
-    {name:"Marina Rush", type:"Ride", lat:9.92470, lng:78.12040, icon:"🎢"},
-    {name:"Kaveri Cyclone", type:"Ride", lat:9.92420, lng:78.11960, icon:"🌪️"},
-    {name:"Tamilan Twist", type:"Ride", lat:9.92480, lng:78.11870, icon:"🎡"},
+    {
+        id: 3,
+        name: "Madurai Thunder",
+        type: "Thrill",
+        icon: "⚡",
+        image: "https://images.unsplash.com/photo-1589793463381-4e6a1e0a0f5d?auto=format&fit=crop&w=900&q=80",
+        wait: 22,
+        crowd: "High"
+    },
 
-    {name:"Vaigai Rapids", type:"Ride", lat:9.92650, lng:78.11850, icon:"🌊"},
-    {name:"Kaveri Splash", type:"Ride", lat:9.92700, lng:78.11940, icon:"💦"},
-    {name:"Marina Wave", type:"Ride", lat:9.92720, lng:78.12050, icon:"🌊"},
-    {name:"Cauvery Falls", type:"Ride", lat:9.92680, lng:78.12130, icon:"💧"},
-    {name:"Tamil Nadu Aqua Ride", type:"Ride", lat:9.92590, lng:78.12200, icon:"🏄"},
+    {
+        id: 4,
+        name: "Marina Rush",
+        type: "Thrill",
+        icon: "🎢",
+        image: "https://images.unsplash.com/photo-1597466599360-3b9775841aec?auto=format&fit=crop&w=900&q=80",
+        wait: 15,
+        crowd: "Medium"
+    },
 
-    {name:"Meenakshi Carousel", type:"Ride", lat:9.92400, lng:78.12180, icon:"🎠"},
-    {name:"Temple Town Train", type:"Ride", lat:9.92350, lng:78.12100, icon:"🚂"},
-    {name:"Kovil Oorla Ride", type:"Ride", lat:9.92330, lng:78.12000, icon:"🎢"},
-    {name:"Jasmine Wheel", type:"Ride", lat:9.92370, lng:78.11890, icon:"🎡"},
-    {name:"Pongal Express", type:"Ride", lat:9.92430, lng:78.11790, icon:"🚂"},
+    {
+        id: 5,
+        name: "Kaveri Cyclone",
+        type: "Thrill",
+        icon: "🌪️",
+        image: "https://images.unsplash.com/photo-1567599752151-0a6f8f4b5e0f?auto=format&fit=crop&w=900&q=80",
+        wait: 25,
+        crowd: "High"
+    },
 
-    {name:"Kutty Chutti Ride", type:"Ride", lat:9.92510, lng:78.11780, icon:"🧒"},
-    {name:"Little Tamilan Flyers", type:"Ride", lat:9.92600, lng:78.11770, icon:"✈️"},
-    {name:"Chinna Chinna Cars", type:"Ride", lat:9.92700, lng:78.11790, icon:"🚗"},
-    {name:"Butterfly Garden Ride", type:"Ride", lat:9.92760, lng:78.11860, icon:"🦋"},
+    {
+        id: 6,
+        name: "Tamilan Twist",
+        type: "Thrill",
+        icon: "🎡",
+        image: "https://images.unsplash.com/photo-1594736797933-d0501ba2fe65?auto=format&fit=crop&w=900&q=80",
+        wait: 12,
+        crowd: "Low"
+    },
 
+    {
+        id: 7,
+        name: "Vaigai Rapids",
+        type: "Water",
+        icon: "🌊",
+        image: "https://images.unsplash.com/photo-1544551763-46a013bb70d5?auto=format&fit=crop&w=900&q=80",
+        wait: 25,
+        crowd: "High"
+    },
 
-    /* 10 FOOD SHOPS */
+    {
+        id: 8,
+        name: "Kaveri Splash",
+        type: "Water",
+        icon: "💦",
+        image: "https://images.unsplash.com/photo-1560089000-7433a4ebbd64?auto=format&fit=crop&w=900&q=80",
+        wait: 20,
+        crowd: "Medium"
+    },
 
-    {name:"Madurai Mess", type:"Food", lat:9.92800, lng:78.11920, icon:"🍔"},
-    {name:"Chennai Tiffin Corner", type:"Food", lat:9.92810, lng:78.12000, icon:"🍛"},
-    {name:"Kongu Kitchen", type:"Food", lat:9.92790, lng:78.12080, icon:"🍽️"},
-    {name:"Chettinad Treats", type:"Food", lat:9.92750, lng:78.12160, icon:"🍗"},
-    {name:"Kaveri Food Court", type:"Food", lat:9.92680, lng:78.12220, icon:"🍔"},
-    {name:"Marina Snacks", type:"Food", lat:9.92580, lng:78.12270, icon:"🍟"},
-    {name:"Amma's Kitchen", type:"Food", lat:9.92480, lng:78.12260, icon:"🍲"},
-    {name:"Tamil Virundhu", type:"Food", lat:9.92390, lng:78.12240, icon:"🍱"},
-    {name:"Jigarthanda Junction", type:"Food", lat:9.92300, lng:78.12160, icon:"🥤"},
-    {name:"Filter Coffee House", type:"Food", lat:9.92280, lng:78.12060, icon:"☕"},
+    {
+        id: 9,
+        name: "Marina Wave",
+        type: "Water",
+        icon: "🌊",
+        image: "https://images.unsplash.com/photo-1600965962361-9035dbfd1c50?auto=format&fit=crop&w=900&q=80",
+        wait: 30,
+        crowd: "High"
+    },
 
+    {
+        id: 10,
+        name: "Cauvery Falls",
+        type: "Water",
+        icon: "💧",
+        image: "https://images.unsplash.com/photo-1433086966358-54859d0ed716?auto=format&fit=crop&w=900&q=80",
+        wait: 14,
+        crowd: "Low"
+    },
 
-    /* 5 TOY SHOPS */
+    {
+        id: 11,
+        name: "Tamil Nadu Aqua Ride",
+        type: "Water",
+        icon: "🏄",
+        image: "https://images.unsplash.com/photo-1502680390469-be75c86b636f?auto=format&fit=crop&w=900&q=80",
+        wait: 18,
+        crowd: "Medium"
+    },
 
-    {name:"Kutty World", type:"Toy Shop", lat:9.92270, lng:78.11970, icon:"🧸"},
-    {name:"Chinna Toys", type:"Toy Shop", lat:9.92300, lng:78.11880, icon:"🧸"},
-    {name:"Tamilan Toy Hub", type:"Toy Shop", lat:9.92360, lng:78.11790, icon:"🧸"},
-    {name:"Little Star Toys", type:"Toy Shop", lat:9.92440, lng:78.11720, icon:"⭐"},
-    {name:"Bommai Veedu", type:"Toy Shop", lat:9.92530, lng:78.11690, icon:"🪆"},
+    {
+        id: 12,
+        name: "Meenakshi Carousel",
+        type: "Family",
+        icon: "🎠",
+        image: "https://images.unsplash.com/photo-1513889961551-628c1e5e1ee9?auto=format&fit=crop&w=900&q=80",
+        wait: 8,
+        crowd: "Low"
+    },
 
+    {
+        id: 13,
+        name: "Temple Town Train",
+        type: "Family",
+        icon: "🚂",
+        image: "https://images.unsplash.com/photo-1474487548417-781cb71495f3?auto=format&fit=crop&w=900&q=80",
+        wait: 12,
+        crowd: "Low"
+    },
 
-    /* 5 RESTROOMS */
+    {
+        id: 14,
+        name: "Kovil Oorla Ride",
+        type: "Family",
+        icon: "🎢",
+        image: "https://images.unsplash.com/photo-1594736797933-d0501ba2fe65?auto=format&fit=crop&w=900&q=80",
+        wait: 16,
+        crowd: "Medium"
+    },
 
-    {name:"North Gate Restroom", type:"Restroom", lat:9.92830, lng:78.11840, icon:"🚻"},
-    {name:"South Gate Restroom", type:"Restroom", lat:9.92240, lng:78.11930, icon:"🚻"},
-    {name:"Central Park Restroom", type:"Restroom", lat:9.92520, lng:78.11980, icon:"🚻"},
-    {name:"Water Zone Restroom", type:"Restroom", lat:9.92750, lng:78.12240, icon:"🚻"},
-    {name:"Kids Zone Restroom", type:"Restroom", lat:9.92790, lng:78.11750, icon:"🚻"},
+    {
+        id: 15,
+        name: "Jasmine Wheel",
+        type: "Family",
+        icon: "🎡",
+        image: "https://images.unsplash.com/photo-1508377598255-2c9a8d4c3e36?auto=format&fit=crop&w=900&q=80",
+        wait: 10,
+        crowd: "Low"
+    },
 
+    {
+        id: 16,
+        name: "Pongal Express",
+        type: "Family",
+        icon: "🚂",
+        image: "https://images.unsplash.com/photo-1474487548417-781cb71495f3?auto=format&fit=crop&w=900&q=80",
+        wait: 15,
+        crowd: "Medium"
+    },
 
-    /* 5 HOTELS */
+    {
+        id: 17,
+        name: "Kutty Chutti Ride",
+        type: "Kids",
+        icon: "🧒",
+        image: "https://images.unsplash.com/photo-1596461404969-9ae70f2830c1?auto=format&fit=crop&w=900&q=80",
+        wait: 7,
+        crowd: "Low"
+    },
 
-    {name:"Vaigai Residency", type:"Hotel", lat:9.92900, lng:78.11880, icon:"🏨"},
-    {name:"Marina Stay", type:"Hotel", lat:9.92920, lng:78.12000, icon:"🏨"},
-    {name:"Madurai Comfort Inn", type:"Hotel", lat:9.92880, lng:78.12120, icon:"🏨"},
-    {name:"Kaveri Residency", type:"Hotel", lat:9.92780, lng:78.12300, icon:"🏨"},
-    {name:"Chola Stay", type:"Hotel", lat:9.92300, lng:78.12320, icon:"🏨"},
+    {
+        id: 18,
+        name: "Little Tamilan Flyers",
+        type: "Kids",
+        icon: "✈️",
+        image: "https://images.unsplash.com/photo-1530103862676-de8c9debad1d?auto=format&fit=crop&w=900&q=80",
+        wait: 9,
+        crowd: "Low"
+    },
 
+    {
+        id: 19,
+        name: "Chinna Chinna Cars",
+        type: "Kids",
+        icon: "🚗",
+        image: "https://images.unsplash.com/photo-1503736334956-4c8f8e92946d?auto=format&fit=crop&w=900&q=80",
+        wait: 11,
+        crowd: "Medium"
+    },
 
-    /* 2 LOCKERS */
-
-    {name:"Main Gate Locker", type:"Locker", lat:9.92220, lng:78.11850, icon:"🔐"},
-    {name:"Water Zone Locker", type:"Locker", lat:9.92680, lng:78.12300, icon:"🔐"},
-
-
-    /* 1 FIRST AID */
-
-    {name:"First Aid Center", type:"First Aid", lat:9.92500, lng:78.12300, icon:"🩹"}
+    {
+        id: 20,
+        name: "Butterfly Garden Ride",
+        type: "Kids",
+        icon: "🦋",
+        image: "https://images.unsplash.com/photo-1452570053594-1b985d6ea890?auto=format&fit=crop&w=900&q=80",
+        wait: 6,
+        crowd: "Low"
+    }
 
 ];
 
 
-/* =====================================
-   INITIALIZE GOOGLE MAP
-===================================== */
+/* =====================================================
+   GET UPDATED RIDE DATA FROM ADMIN
+===================================================== */
+
+function getUpdatedRide(ride) {
+
+    const saved =
+        localStorage.getItem("ride_" + ride.id);
+
+    if (saved) {
+
+        try {
+
+            const data = JSON.parse(saved);
+
+            return {
+                ...ride,
+                wait: data.wait ?? ride.wait,
+                crowd: data.crowd ?? ride.crowd
+            };
+
+        } catch (error) {
+
+            return ride;
+
+        }
+
+    }
+
+    return ride;
+}
+
+
+/* =====================================================
+   SHOW RIDES
+===================================================== */
+
+function showRides(category, button) {
+
+    const grid =
+        document.getElementById("ridesGrid");
+
+    grid.innerHTML = "";
+
+    document
+        .querySelectorAll(".filter-btn")
+        .forEach(btn => {
+            btn.classList.remove("active");
+        });
+
+    if (button) {
+        button.classList.add("active");
+    }
+
+    let filteredRides = rides;
+
+    if (category !== "All") {
+
+        filteredRides =
+            rides.filter(
+                ride => ride.type === category
+            );
+
+    }
+
+    filteredRides.forEach(ride => {
+
+        const updated =
+            getUpdatedRide(ride);
+
+        const crowdClass =
+            updated.crowd.toLowerCase();
+
+        const card =
+            document.createElement("div");
+
+        card.className = "ride-card";
+
+        card.innerHTML = `
+
+            <img
+                class="ride-image"
+                src="${updated.image}"
+                alt="${updated.name}"
+            >
+
+            <div class="ride-content">
+
+                <div class="ride-icon">
+                    ${updated.icon}
+                </div>
+
+                <h2>
+                    ${updated.name}
+                </h2>
+
+                <div class="ride-type">
+                    ${updated.type} Ride
+                </div>
+
+                <div class="ride-info">
+
+                    <span>
+                        ⏱️ ${updated.wait} min
+                    </span>
+
+                    <span class="${crowdClass}">
+                        👥 ${updated.crowd}
+                    </span>
+
+                </div>
+
+            </div>
+        `;
+
+        grid.appendChild(card);
+
+    });
+
+}
+
+
+/* =====================================================
+   SMARTPARK 48 MAP LOCATIONS
+===================================================== */
+
+const locations = [
+
+    /* ---------------- RIDES ---------------- */
+
+    {
+        name: "Vaigai Vortex",
+        type: "Thrill Ride",
+        icon: "🎢",
+        lat: 9.92580,
+        lng: 78.11920
+    },
+
+    {
+        name: "Chola Coaster",
+        type: "Thrill Ride",
+        icon: "🎢",
+        lat: 9.92620,
+        lng: 78.12000
+    },
+
+    {
+        name: "Madurai Thunder",
+        type: "Thrill Ride",
+        icon: "⚡",
+        lat: 9.92540,
+        lng: 78.12100
+    },
+
+    {
+        name: "Marina Rush",
+        type: "Thrill Ride",
+        icon: "🎢",
+        lat: 9.92470,
+        lng: 78.12040
+    },
+
+    {
+        name: "Kaveri Cyclone",
+        type: "Thrill Ride",
+        icon: "🌪️",
+        lat: 9.92420,
+        lng: 78.11960
+    },
+
+    {
+        name: "Tamilan Twist",
+        type: "Thrill Ride",
+        icon: "🎡",
+        lat: 9.92480,
+        lng: 78.11870
+    },
+
+    {
+        name: "Vaigai Rapids",
+        type: "Water Ride",
+        icon: "🌊",
+        lat: 9.92650,
+        lng: 78.11850
+    },
+
+    {
+        name: "Kaveri Splash",
+        type: "Water Ride",
+        icon: "💦",
+        lat: 9.92700,
+        lng: 78.11940
+    },
+
+    {
+        name: "Marina Wave",
+        type: "Water Ride",
+        icon: "🌊",
+        lat: 9.92720,
+        lng: 78.12050
+    },
+
+    {
+        name: "Cauvery Falls",
+        type: "Water Ride",
+        icon: "💧",
+        lat: 9.92680,
+        lng: 78.12130
+    },
+
+    {
+        name: "Tamil Nadu Aqua Ride",
+        type: "Water Ride",
+        icon: "🏄",
+        lat: 9.92590,
+        lng: 78.12200
+    },
+
+    {
+        name: "Meenakshi Carousel",
+        type: "Family Ride",
+        icon: "🎠",
+        lat: 9.92400,
+        lng: 78.12180
+    },
+
+    {
+        name: "Temple Town Train",
+        type: "Family Ride",
+        icon: "🚂",
+        lat: 9.92350,
+        lng: 78.12100
+    },
+
+    {
+        name: "Kovil Oorla Ride",
+        type: "Family Ride",
+        icon: "🎢",
+        lat: 9.92330,
+        lng: 78.12000
+    },
+
+    {
+        name: "Jasmine Wheel",
+        type: "Family Ride",
+        icon: "🎡",
+        lat: 9.92370,
+        lng: 78.11890
+    },
+
+    {
+        name: "Pongal Express",
+        type: "Family Ride",
+        icon: "🚂",
+        lat: 9.92430,
+        lng: 78.11790
+    },
+
+    {
+        name: "Kutty Chutti Ride",
+        type: "Kids Ride",
+        icon: "🧒",
+        lat: 9.92510,
+        lng: 78.11780
+    },
+
+    {
+        name: "Little Tamilan Flyers",
+        type: "Kids Ride",
+        icon: "✈️",
+        lat: 9.92600,
+        lng: 78.11770
+    },
+
+    {
+        name: "Chinna Chinna Cars",
+        type: "Kids Ride",
+        icon: "🚗",
+        lat: 9.92700,
+        lng: 78.11790
+    },
+
+    {
+        name: "Butterfly Garden Ride",
+        type: "Kids Ride",
+        icon: "🦋",
+        lat: 9.92760,
+        lng: 78.11860
+    },
+
+
+    /* ---------------- FOOD ---------------- */
+
+    {
+        name: "Madurai Mess",
+        type: "Food",
+        icon: "🍔",
+        lat: 9.92800,
+        lng: 78.11920
+    },
+
+    {
+        name: "Chennai Tiffin Corner",
+        type: "Food",
+        icon: "🍽️",
+        lat: 9.92810,
+        lng: 78.12000
+    },
+
+    {
+        name: "Kongu Kitchen",
+        type: "Food",
+        icon: "🍛",
+        lat: 9.92790,
+        lng: 78.12080
+    },
+
+    {
+        name: "Chettinad Treats",
+        type: "Food",
+        icon: "🍴",
+        lat: 9.92750,
+        lng: 78.12160
+    },
+
+    {
+        name: "Kaveri Food Court",
+        type: "Food",
+        icon: "🍔",
+        lat: 9.92680,
+        lng: 78.12220
+    },
+
+    {
+        name: "Marina Snacks",
+        type: "Food",
+        icon: "🍟",
+        lat: 9.92580,
+        lng: 78.12270
+    },
+
+    {
+        name: "Amma's Kitchen",
+        type: "Food",
+        icon: "🍲",
+        lat: 9.92480,
+        lng: 78.12260
+    },
+
+    {
+        name: "Tamil Virundhu",
+        type: "Food",
+        icon: "🍱",
+        lat: 9.92390,
+        lng: 78.12240
+    },
+
+    {
+        name: "Jigarthanda Junction",
+        type: "Food",
+        icon: "🥤",
+        lat: 9.92300,
+        lng: 78.12160
+    },
+
+    {
+        name: "Filter Coffee House",
+        type: "Food",
+        icon: "☕",
+        lat: 9.92280,
+        lng: 78.12060
+    },
+
+
+    /* ---------------- TOYS ---------------- */
+
+    {
+        name: "Kutty World",
+        type: "Toy Shop",
+        icon: "🧸",
+        lat: 9.92270,
+        lng: 78.11970
+    },
+
+    {
+        name: "Chinna Toys",
+        type: "Toy Shop",
+        icon: "🧸",
+        lat: 9.92300,
+        lng: 78.11880
+    },
+
+    {
+        name: "Tamilan Toy Hub",
+        type: "Toy Shop",
+        icon: "🎁",
+        lat: 9.92360,
+        lng: 78.11790
+    },
+
+    {
+        name: "Little Star Toys",
+        type: "Toy Shop",
+        icon: "⭐",
+        lat: 9.92440,
+        lng: 78.11720
+    },
+
+    {
+        name: "Bommai Veedu",
+        type: "Toy Shop",
+        icon: "🪀",
+        lat: 9.92530,
+        lng: 78.11690
+    },
+
+
+    /* ---------------- RESTROOMS ---------------- */
+
+    {
+        name: "North Gate Restroom",
+        type: "Restroom",
+        icon: "🚻",
+        lat: 9.92830,
+        lng: 78.11840
+    },
+
+    {
+        name: "South Gate Restroom",
+        type: "Restroom",
+        icon: "🚻",
+        lat: 9.92240,
+        lng: 78.11930
+    },
+
+    {
+        name: "Central Park Restroom",
+        type: "Restroom",
+        icon: "🚻",
+        lat: 9.92520,
+        lng: 78.11980
+    },
+
+    {
+        name: "Water Zone Restroom",
+        type: "Restroom",
+        icon: "🚻",
+        lat: 9.92750,
+        lng: 78.12240
+    },
+
+    {
+        name: "Kids Zone Restroom",
+        type: "Restroom",
+        icon: "🚻",
+        lat: 9.92790,
+        lng: 78.11750
+    },
+
+
+    /* ---------------- HOTELS ---------------- */
+
+    {
+        name: "Vaigai Residency",
+        type: "Hotel",
+        icon: "🏨",
+        lat: 9.92900,
+        lng: 78.11880
+    },
+
+    {
+        name: "Marina Stay",
+        type: "Hotel",
+        icon: "🏨",
+        lat: 9.92920,
+        lng: 78.12000
+    },
+
+    {
+        name: "Madurai Comfort Inn",
+        type: "Hotel",
+        icon: "🏨",
+        lat: 9.92880,
+        lng: 78.12120
+    },
+
+    {
+        name: "Kaveri Residency",
+        type: "Hotel",
+        icon: "🏨",
+        lat: 9.92780,
+        lng: 78.12300
+    },
+
+    {
+        name: "Chola Stay",
+        type: "Hotel",
+        icon: "🏨",
+        lat: 9.92300,
+        lng: 78.12320
+    },
+
+
+    /* ---------------- LOCKERS ---------------- */
+
+    {
+        name: "Main Gate Locker",
+        type: "Locker",
+        icon: "🔐",
+        lat: 9.92220,
+        lng: 78.11850
+    },
+
+    {
+        name: "Water Zone Locker",
+        type: "Locker",
+        icon: "🔐",
+        lat: 9.92680,
+        lng: 78.12300
+    },
+
+
+    /* ---------------- FIRST AID ---------------- */
+
+    {
+        name: "First Aid Center",
+        type: "First Aid",
+        icon: "🩹",
+        lat: 9.92500,
+        lng: 78.12300
+    }
+
+];
+
+
+/* =====================================================
+   GOOGLE MAP
+===================================================== */
+
+let map;
+
+let markers = [];
+
+let infoWindow;
+
+
+/* =====================================================
+   INITIALIZE MAP
+===================================================== */
 
 function initMap() {
 
+    const center = {
+        lat: 9.92520,
+        lng: 78.11980
+    };
+
+
     map = new google.maps.Map(
-        document.getElementById("map"),
+        document.getElementById("smartparkMap"),
         {
-            center: {
-                lat: 9.9252,
-                lng: 78.1198
-            },
+            center: center,
 
             zoom: 16,
 
             mapTypeControl: true,
 
-            streetViewControl: false,
+            streetViewControl: true,
 
-            fullscreenControl: true
+            fullscreenControl: true,
+
+            zoomControl: true
         }
     );
 
 
-    smartParkLocations.forEach(function(location) {
+    infoWindow =
+        new google.maps.InfoWindow();
 
-        const marker = new google.maps.Marker({
+
+    locations.forEach(
+        location => {
+
+            createMarker(location);
+
+        }
+    );
+
+}
+
+
+/* =====================================================
+   CREATE MARKER
+===================================================== */
+
+function createMarker(location) {
+
+    const marker =
+        new google.maps.Marker({
 
             position: {
                 lat: location.lat,
@@ -193,99 +1192,273 @@ function initMap() {
         });
 
 
-        marker.addListener("click", function() {
+    marker.addListener(
+        "click",
+        function () {
 
-            showNearby(location);
+            showMarkerInfo(
+                marker,
+                location
+            );
 
-        });
+            showNearby(
+                location
+            );
 
+        }
+    );
+
+
+    markers.push(marker);
+
+}
+
+
+/* =====================================================
+   MARKER INFO
+===================================================== */
+
+function showMarkerInfo(
+    marker,
+    location
+) {
+
+    const html = `
+
+        <div class="info-window">
+
+            <h3>
+                ${location.icon}
+                ${location.name}
+            </h3>
+
+            <p>
+                <strong>Type:</strong>
+                ${location.type}
+            </p>
+
+        </div>
+
+    `;
+
+    infoWindow.setContent(html);
+
+    infoWindow.open(
+        map,
+        marker
+    );
+
+}
+
+
+/* =====================================================
+   SHOW NEARBY LOCATIONS
+===================================================== */
+
+function showNearby(selected) {
+
+    const details =
+        document.getElementById(
+            "mapDetails"
+        );
+
+    const selectedName =
+        document.getElementById(
+            "selectedPlaceName"
+        );
+
+    const selectedType =
+        document.getElementById(
+            "selectedPlaceType"
+        );
+
+    const nearbyGrid =
+        document.getElementById(
+            "nearbyGrid"
+        );
+
+
+    selectedName.innerHTML =
+        `${selected.icon} ${selected.name}`;
+
+
+    selectedType.innerHTML =
+        `${selected.type} • Nearby SmartPark locations`;
+
+
+    nearbyGrid.innerHTML = "";
+
+
+    const nearby =
+        locations
+            .filter(
+                location =>
+                    location.name !== selected.name
+            )
+            .map(
+                location => {
+
+                    const distance =
+                        calculateDistance(
+                            selected.lat,
+                            selected.lng,
+                            location.lat,
+                            location.lng
+                        );
+
+                    return {
+                        ...location,
+                        distance
+                    };
+
+                }
+            )
+            .filter(
+                location =>
+                    location.distance <= 0.20
+            )
+            .sort(
+                (a, b) =>
+                    a.distance - b.distance
+            )
+            .slice(0, 6);
+
+
+    if (nearby.length === 0) {
+
+        nearbyGrid.innerHTML = `
+
+            <div class="nearby-card">
+
+                <h4>
+                    No nearby locations found
+                </h4>
+
+                <p>
+                    Try another marker.
+                </p>
+
+            </div>
+
+        `;
+
+    } else {
+
+        nearby.forEach(
+            location => {
+
+                const card =
+                    document.createElement(
+                        "div"
+                    );
+
+                card.className =
+                    "nearby-card";
+
+                card.innerHTML = `
+
+                    <h4>
+                        ${location.icon}
+                        ${location.name}
+                    </h4>
+
+                    <span class="place-tag">
+                        ${location.type}
+                    </span>
+
+                    <p>
+                        📍 ${location.distance.toFixed(2)} km
+                    </p>
+
+                `;
+
+                nearbyGrid.appendChild(
+                    card
+                );
+
+            }
+        );
+
+    }
+
+
+    details.classList.add("show");
+
+
+    details.scrollIntoView({
+        behavior: "smooth",
+        block: "nearest"
     });
 
 }
 
 
-/* =====================================
-   SHOW NEARBY LOCATIONS
-===================================== */
+/* =====================================================
+   DISTANCE CALCULATION
+===================================================== */
 
-function showNearby(selectedLocation) {
+function calculateDistance(
+    lat1,
+    lon1,
+    lat2,
+    lon2
+) {
 
-    const nearby =
-        smartParkLocations
-        .filter(function(place) {
+    const R = 6371;
 
-            if (place.name === selectedLocation.name) {
-                return false;
-            }
+    const dLat =
+        (lat2 - lat1)
+        * Math.PI / 180;
 
-            const distance =
-                Math.sqrt(
-                    Math.pow(place.lat - selectedLocation.lat, 2) +
-                    Math.pow(place.lng - selectedLocation.lng, 2)
-                );
+    const dLon =
+        (lon2 - lon1)
+        * Math.PI / 180;
 
-            return distance < 0.0015;
+    const a =
+        Math.sin(dLat / 2)
+        * Math.sin(dLat / 2)
+        +
+        Math.cos(
+            lat1 * Math.PI / 180
+        )
+        *
+        Math.cos(
+            lat2 * Math.PI / 180
+        )
+        *
+        Math.sin(dLon / 2)
+        *
+        Math.sin(dLon / 2);
 
-        })
-        .slice(0, 5);
+    const c =
+        2 *
+        Math.atan2(
+            Math.sqrt(a),
+            Math.sqrt(1 - a)
+        );
 
-
-    let html = `
-
-        <h3>
-            ${selectedLocation.icon}
-            ${selectedLocation.name}
-        </h3>
-
-        <p>
-            <b>Type:</b>
-            ${selectedLocation.type}
-        </p>
-
-        <h4>📍 Nearby Locations</h4>
-
-    `;
-
-
-    if (nearby.length === 0) {
-
-        html += `
-            <p>No nearby locations found.</p>
-        `;
-
-    } else {
-
-        nearby.forEach(function(place) {
-
-            html += `
-
-                <span class="nearby-item">
-
-                    ${place.icon}
-                    ${place.name}
-
-                </span>
-
-            `;
-
-        });
-
-    }
-
-
-    document.getElementById(
-        "location-info"
-    ).innerHTML = html;
+    return R * c;
 
 }
 
+
+/* =====================================================
+   LOAD RIDES
+===================================================== */
+
+showRides("All");
+
+
 </script>
 
 
-<!-- GOOGLE MAP API -->
+<!-- GOOGLE MAPS API -->
 
-<script
-    async
+<script async
     defer
     src="https://maps.googleapis.com/maps/api/js?key=YOUR_GOOGLE_MAPS_API_KEY&callback=initMap">
 </script>
+
+
+</body>
+</html>
